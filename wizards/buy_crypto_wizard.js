@@ -277,11 +277,11 @@ exports.buy_crypto = new WizardScene("buy_crypto",
         return ctx.wizard.next()
       } else {
         ctx.reply(`❌ Некорректный адрес BTC. Попробуйте еще раз`)
-        // return ctx.scene.leave()
+        return ctx.scene.leave()
       }
     } else {
       ctx.reply(`❌ Некорректный адрес BTC. Попробуйте еще раз`)
-    //   return ctx.scene.leave()
+      return ctx.scene.leave()
     }
   },
   buyStepHandler,
