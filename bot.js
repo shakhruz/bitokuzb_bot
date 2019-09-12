@@ -90,7 +90,8 @@ exports.startBot = function () {
         
         bot.telegram.setWebhook(`${URL}bot${BOT_TOKEN}`);
         bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
-        // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
+        app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
+        
         // app.listen(80, 443)
         // console.log("started listening...")
         
