@@ -68,18 +68,34 @@ exports.shortSUM = function (num) {
 }
 
 
+// exports.createInvoice = function(qty_sum, contract_id) {
+//     // let token = process.env.mode == "PRODUCTION" ? data.provider_token : data.provider_token_dev
+//     return {
+//         provider_token: data.provider_token_live,
+//         start_parameter: contract_id,
+//         title: 'Биткоин (BTC)',
+//         description: 'Первая и самая популярная крипто валюта (крипто актив)',
+//         currency: 'UZS',
+//         is_flexible: false,
+//         need_shipping_address: false,
+//         prices: [{label: 'Биткоин (BTC)', amount: Math.trunc(qty_sum * 100) }],
+//         payload: {contract_id},
+//         photo_url: "https://cdn.paycom.uz/merchants/8b46bb4b52e4e8e7f396ad673165f66ca85ad5e2.png"
+//     }
+// }
+
 exports.createInvoice = function(qty_sum, contract_id) {
     // let token = process.env.mode == "PRODUCTION" ? data.provider_token : data.provider_token_dev
     return {
         provider_token: data.provider_token_live,
-        start_parameter: contract_id,
+        start_parameter: '',
         title: 'Биткоин (BTC)',
         description: 'Первая и самая популярная крипто валюта (крипто актив)',
         currency: 'UZS',
         is_flexible: false,
         need_shipping_address: false,
         prices: [{label: 'Биткоин (BTC)', amount: Math.trunc(qty_sum * 100) }],
-        payload: {contract_id},
+        payload: {},
         photo_url: "https://cdn.paycom.uz/merchants/8b46bb4b52e4e8e7f396ad673165f66ca85ad5e2.png"
     }
 }
