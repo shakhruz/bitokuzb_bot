@@ -22,7 +22,7 @@ const rates = require('./rates.js')
 
 const mode = data.MODE
 const BOT_TOKEN = mode === "PRODUCTION" ? (data.BOT_TOKEN || "") : data.BOT_DEV_TOKEN 
-const PORT = 2000 // 443
+const PORT = 443 // 443
 const bot = new Telegraf(BOT_TOKEN)
 const URL = data.URL
 const admins_id = data.admins_id
@@ -95,8 +95,8 @@ exports.startBot = function () {
         console.log("Стартуем в режиме сервера...")
         // bot.telegram.setWebhook('https://server.tld:8443/secret-path')
         
-        bot.telegram.setWebhook(`${URL}bot${BOT_TOKEN}`);
-        bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
+        bot.telegram.setWebhook(`${URL}:443/bot${BOT_TOKEN}`);
+        bot.startWebhook(`${URL}/bot${BOT_TOKEN}`, null, PORT);
         // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
 
         // app.listen(80, 443)
