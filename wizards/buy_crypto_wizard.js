@@ -65,9 +65,13 @@ buyStepHandler.action('regular', (ctx) => {
         ctx.wizard.state.qty_btc = ctx.wizard.state.qty_btc - ctx.wizard.state.fee_sat / 100000000
     } 
 
-    replyAddressQuestion(ctx, ()=>{
-      return ctx.wizard.next()
-    })
+    bcoin.checkWallet(ctx.from.id, (account) => {
+      ctx.wizard.state.address = account.receiveAddress
+      console.log("found internal btc addr: ", account.receiveAddress)
+      let keyboard_buttons = Markup.keyboard([account.receiveAddress]).oneTime().resize().extra();
+      ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
+                          keyboard_buttons)
+  }) 
 })
 buyStepHandler.action('fast', (ctx) => {
     ctx.wizard.state.fee_type = "fast"
@@ -80,19 +84,22 @@ buyStepHandler.action('fast', (ctx) => {
         console.log("qty_btc: ", ctx.wizard.state.qty_btc, " fee_high: ", ctx.wizard.state.fee_sat)
         ctx.wizard.state.qty_btc = ctx.wizard.state.qty_btc - ctx.wizard.state.fee_sat / 100000000
     }     
-    replyAddressQuestion(ctx, ()=>{
-      return ctx.wizard.next()
-    })
+    bcoin.checkWallet(ctx.from.id, (account) => {
+      ctx.wizard.state.address = account.receiveAddress
+      console.log("found internal btc addr: ", account.receiveAddress)
+      let keyboard_buttons = Markup.keyboard([account.receiveAddress]).oneTime().resize().extra();
+      ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
+                          keyboard_buttons)
+  }) 
 })
 
-function replyAddressQuestion(ctx, callback) {
+function replyAddressQuestion(ctx) {
     bcoin.checkWallet(ctx.from.id, (account) => {
         ctx.wizard.state.address = account.receiveAddress
         console.log("found internal btc addr: ", account.receiveAddress)
         let keyboard_buttons = Markup.keyboard([account.receiveAddress]).oneTime().resize().extra();
         ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
                             keyboard_buttons)
-        callback()
     }) 
 }
 
@@ -155,7 +162,7 @@ buyStepHandler.action('no', (ctx) => {
 
 buyStepHandler.use(
   (ctx) => {
-    ctx.replyWithMarkdown('хммм... не понял')
+    ctx.reply('хммм... не понял')
     return ctx.scene.leave()
   }
 )
