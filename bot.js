@@ -96,7 +96,7 @@ exports.startBot = function () {
         // bot.telegram.setWebhook('https://server.tld:8443/secret-path')
         
         bot.telegram.setWebhook(`${URL}bot${BOT_TOKEN}`);
-        // bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
+        bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
         // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
 
         // app.listen(80, 443)
