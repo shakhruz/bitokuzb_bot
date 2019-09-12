@@ -85,9 +85,9 @@ function replyAddressQuestion(ctx) {
         ctx.wizard.state.address = account.receiveAddress
         console.log("found internal btc addr: ", account.receiveAddress)
         let keyboard_buttons = Markup.keyboard([account.receiveAddress]).oneTime().resize().extra();
-        ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
-                            keyboard_buttons)
-        // ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле ниже 👇')
+        // ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
+        //                     keyboard_buttons)
+        ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле ниже 👇')
         return ctx.wizard.next()
     }) 
 }
