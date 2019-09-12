@@ -95,7 +95,6 @@ exports.startBot = function () {
         console.log("Стартуем в режиме сервера...")
         // bot.telegram.setWebhook('https://server.tld:8443/secret-path')
         
-        // bot.startWebhook(`${URL}/bot${BOT_TOKEN}`, null, PORT);
         // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
         
         // app.get('/', (req, res) => {
@@ -117,7 +116,8 @@ exports.startBot = function () {
           store: require('greenlock-store-fs') 
         }).listen(80, 443)
 
-        bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
+        // bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
+        bot.startWebhook(`${URL}/bot${BOT_TOKEN}`, null, PORT);
     } else {
         console.log("Стартуем в режиме разработки...")
         bot.telegram.setWebhook("")
