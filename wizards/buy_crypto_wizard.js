@@ -71,6 +71,7 @@ buyStepHandler.action('regular', (ctx) => {
       let keyboard_buttons = Markup.keyboard([account.receiveAddress]).oneTime().resize().extra();
       ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
                           keyboard_buttons)
+      return ctx.wizard.next()
   }) 
 })
 buyStepHandler.action('fast', (ctx) => {
@@ -85,11 +86,12 @@ buyStepHandler.action('fast', (ctx) => {
         ctx.wizard.state.qty_btc = ctx.wizard.state.qty_btc - ctx.wizard.state.fee_sat / 100000000
     }     
     bcoin.checkWallet(ctx.from.id, (account) => {
-      ctx.wizard.state.address = account.receiveAddress
-      console.log("found internal btc addr: ", account.receiveAddress)
-      let keyboard_buttons = Markup.keyboard([account.receiveAddress]).oneTime().resize().extra();
-      ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
-                          keyboard_buttons)
+        ctx.wizard.state.address = account.receiveAddress
+        console.log("found internal btc addr: ", account.receiveAddress)
+        let keyboard_buttons = Markup.keyboard([account.receiveAddress]).oneTime().resize().extra();
+        ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
+                            keyboard_buttons)
+        return ctx.wizard.next()
   }) 
 })
 
