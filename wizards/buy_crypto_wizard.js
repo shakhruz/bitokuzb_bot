@@ -85,7 +85,7 @@ buyStepHandler.action('fast', (ctx) => {
     })
 })
 
-function replyAddressQuestion(ctx) {
+function replyAddressQuestion(ctx, callback) {
     bcoin.checkWallet(ctx.from.id, (account) => {
         ctx.wizard.state.address = account.receiveAddress
         console.log("found internal btc addr: ", account.receiveAddress)
