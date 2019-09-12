@@ -27,29 +27,36 @@ const bot = new Telegraf(BOT_TOKEN)
 const URL = data.URL
 const admins_id = data.admins_id
 
-//
 // Настраиваем ТелеБота
 var Express = require('express')
 var router = Express.Router()
 var app = Express()
 
-app.use("/test", function(req, res) {
-	res.setHeader("Content-Type", "text/html; charset=utf-8")
-	res.end("Hello, World!\n\n💚 🔒.js")
-})
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
-function rawBody(req, res, next) {
-	req.setEncoding('utf8')
-	var data = ''
-	req.on('data', function (chunk) {
-		data += chunk
-	})
+app.post('/' + BOT_TOKEN, function (req, res) {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
 
-	req.on('end', function () {
-		req.rawBody = data
-		next()
-	})
-}
+// app.use("/test", function(req, res) {
+// 	res.setHeader("Content-Type", "text/html; charset=utf-8")
+// 	res.end("Hello, World!\n\n💚 🔒.js")
+// })
+
+// function rawBody(req, res, next) {
+// 	req.setEncoding('utf8')
+// 	var data = ''
+// 	req.on('data', function (chunk) {
+// 		data += chunk
+// 	})
+
+// 	req.on('end', function () {
+// 		req.rawBody = data
+// 		next()
+// 	})
+// }
 
 // router.post('/', function (request, response) {
 //     var event
@@ -69,8 +76,8 @@ function rawBody(req, res, next) {
 //     response.status(200).send('Signed Webhook Received: ' + event.id)
 // })
 
-app.use(rawBody)
-app.use(router)
+// app.use(rawBody)
+// app.use(router)
 
 app.on('pre_checkout_query', (ctx) => {
     console.log("preCheckoutQuery: ", ctx)  
@@ -89,9 +96,9 @@ exports.startBot = function () {
         // bot.telegram.setWebhook('https://server.tld:8443/secret-path')
         
         bot.telegram.setWebhook(`${URL}bot${BOT_TOKEN}`);
-        bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
-        app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
-        
+        // bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
+        // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
+
         // app.listen(80, 443)
         // console.log("started listening...")
         
