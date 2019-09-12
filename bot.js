@@ -116,8 +116,8 @@ exports.startBot = function () {
           store: require('greenlock-store-fs') 
         }).listen(80, 443)
 
-        // bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
-        bot.startWebhook(`${URL}/bot${BOT_TOKEN}`, null, PORT);
+        bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
+        bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
     } else {
         console.log("Стартуем в режиме разработки...")
         bot.telegram.setWebhook("")
