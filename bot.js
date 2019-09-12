@@ -32,13 +32,13 @@ var Express = require('express')
 var router = Express.Router()
 var app = Express()
 
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());
+// var bodyParser = require('body-parser');
+// app.use(bodyParser.json());
 
-app.post('/' + BOT_TOKEN, function (req, res) {
-  bot.processUpdate(req.body);
-  res.sendStatus(200);
-});
+// app.post('/' + BOT_TOKEN, function (req, res) {
+//   bot.processUpdate(req.body);
+//   res.sendStatus(200);
+// });
 
 // app.use("/test", function(req, res) {
 // 	res.setHeader("Content-Type", "text/html; charset=utf-8")
