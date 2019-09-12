@@ -96,15 +96,9 @@ exports.startBot = function () {
         // bot.telegram.setWebhook('https://server.tld:8443/secret-path')
         
         bot.telegram.setWebhook(`${URL}:${PORT}/bot${BOT_TOKEN}`);
-        bot.startWebhook(`${URL}/bot${BOT_TOKEN}`, null, PORT);
+        // bot.startWebhook(`${URL}/bot${BOT_TOKEN}`, null, PORT);
         // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
-
-        // app.listen(80, 443)
-        // console.log("started listening...")
         
-        // bot.telegram.setWebhook("")
-        // bot.launch() 
-
         // app.get('/', (req, res) => {
         //   console.log("hello world request")
         //   res.send('Hello World!')
