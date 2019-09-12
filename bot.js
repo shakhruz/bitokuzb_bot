@@ -90,12 +90,12 @@ app.on('successful_payment', (ctx) => {
 })
 
 exports.startBot = function () {
-    console.log(`startbot, bot token webhook: ${URL}bot${BOT_TOKEN}`)
+    console.log(`startbot, bot token webhook: ${URL}/bot${BOT_TOKEN}`)
     if (mode==="PRODUCTION") {
         console.log("Стартуем в режиме сервера...")
         // bot.telegram.setWebhook('https://server.tld:8443/secret-path')
         
-        bot.telegram.setWebhook(`${URL}:${PORT}/bot${BOT_TOKEN}`);
+        bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
         // bot.startWebhook(`${URL}/bot${BOT_TOKEN}`, null, PORT);
         // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
         
