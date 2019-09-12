@@ -140,7 +140,7 @@ buyStepHandler.action('yes2', (ctx) => {
         console.log("new contract: ", contract_result)
         const invoice = utils.createInvoice(ctx.wizard.state.qty_sum, contract_result.id)
         console.log("invoice: ", invoice)
-        ctx.replyWithInvoice(invoice).then(invoice_result=>{
+        ctx.replyWithInvoice(invoice).then((invoice_result)=>{
             console.log("invoice result: ", invoice_result)    
         })
         console.log("invoice sent")
