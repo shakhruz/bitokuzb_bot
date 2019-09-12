@@ -1,3 +1,2 @@
-# bip2btcbot
-exchange bip to btc
 # bitokuzb_bot
+Онлайн магазин крипто-активов

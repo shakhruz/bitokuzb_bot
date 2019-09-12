@@ -22,7 +22,7 @@ const rates = require('./rates.js')
 
 const mode = data.MODE
 const BOT_TOKEN = mode === "PRODUCTION" ? (data.BOT_TOKEN || "") : data.BOT_DEV_TOKEN 
-const PORT = 8443
+const PORT = 2000 // 443
 const bot = new Telegraf(BOT_TOKEN)
 const URL = data.URL
 const admins_id = data.admins_id
@@ -72,37 +72,49 @@ function rawBody(req, res, next) {
 app.use(rawBody)
 app.use(router)
 
+app.on('pre_checkout_query', (ctx) => {
+    console.log("preCheckoutQuery: ", ctx)  
+    ctx.answerPreCheckoutQuery(true)
+})
+  
+app.on('successful_payment', (ctx) => {
+    console.log(`${ctx.from.username} just paid ${ctx.message.successful_payment.total_amount / 100 } UZS`)
+    console.log("payment: ", ctx.message.successful_payment.total_amount)
+})
+
 exports.startBot = function () {
     console.log(`startbot, bot token webhook: ${URL}bot${BOT_TOKEN}`)
     if (mode==="PRODUCTION") {
         console.log("Стартуем в режиме сервера...")
-        app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
         // bot.telegram.setWebhook('https://server.tld:8443/secret-path')
         
-        // bot.telegram.setWebhook(`${URL}bot${BOT_TOKEN}`);
+        bot.telegram.setWebhook(`${URL}bot${BOT_TOKEN}`);
         bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
+        // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
+        // app.listen(80, 443)
+        // console.log("started listening...")
         
-        bot.telegram.setWebhook("")
-        bot.launch() 
+        // bot.telegram.setWebhook("")
+        // bot.launch() 
 
         // app.get('/', (req, res) => {
         //   console.log("hello world request")
         //   res.send('Hello World!')
         // })
       
-        // require('greenlock-express').create({
-        //   // Let's Encrypt v2 is ACME draft 11
-        //   version: 'draft-11', 
-        //   server: 'https://acme-v02.api.letsencrypt.org/directory', 
-        //   email: 'shakhruz@gmail.com', 
-        //   approveDomains: [ 'mbit.uz', 'www.mbit.uz' ], 
-        //   agreeTos: true, 
-        //   configDir: "~/acme/", 
-        //   app: app, 
-        //   communityMember: true,
-        //   telemetry: true,
-        //   store: require('greenlock-store-fs') 
-        // }).listen(80, 443)
+        require('greenlock-express').create({
+          // Let's Encrypt v2 is ACME draft 11
+          version: 'draft-11', 
+          server: 'https://acme-v02.api.letsencrypt.org/directory', 
+          email: 'shakhruz@gmail.com', 
+          approveDomains: [ 'mbit.uz', 'www.mbit.uz' ], 
+          agreeTos: true, 
+          configDir: "~/acme/", 
+          app: app, 
+          communityMember: true,
+          telemetry: true,
+          store: require('greenlock-store-fs') 
+        }).listen(80, 443)
     } else {
         console.log("Стартуем в режиме разработки...")
         bot.telegram.setWebhook("")
@@ -114,21 +126,8 @@ exports.startBot = function () {
     }      
 }
 
+
 this.startBot()
-
-app.use(rawBody)
-app.use(router)
-
-app.on('pre_checkout_query', (ctx) => {
-    console.log("preCheckoutQuery: ", ctx)  
-    ctx.answerPreCheckoutQuery(true)
-})
-  
-app.on('successful_payment', (ctx) => {
-    console.log(`${ctx.from.username} just paid ${ctx.message.successful_payment.total_amount / 100 } UZS`)
-    console.log("payment: ", ctx.message.successful_payment.total_amount)
-})
-
 
 // Start Bot
 bot.start(ctx => {
@@ -296,9 +295,9 @@ bot.hears("📒 Балансы счетов",  (ctx)=> {
     }, 1000)
 })
 
-// bot.on('sticker', (ctx) => {
-//     ctx.reply(`Код стикера - ${ctx.message.sticker.file_id}`)
-// });
+bot.on('sticker', (ctx) => {
+    ctx.reply(`Код стикера - ${ctx.message.sticker.file_id}`)
+});
 
 // Тесты
 

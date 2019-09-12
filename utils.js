@@ -3,6 +3,8 @@ data = require('./data.js')
 const dotenv = require('dotenv')
 dotenv.config()
 
+const Markup = require("telegraf/markup")
+
 exports.ID = function () {
     return Math.random().toString(36).substr(2, 9).toUpperCase()
 }
@@ -80,4 +82,8 @@ exports.createInvoice = function(qty_sum, contract_id) {
         payload: {contract_id},
         photo_url: "https://cdn.paycom.uz/merchants/8b46bb4b52e4e8e7f396ad673165f66ca85ad5e2.png"
     }
+}
+
+exports.main_menu_keyboard = function () {
+    return Markup.keyboard(["👍 Купить ₿ Биткоин (BTC)", "📒 Балансы счетов"]).oneTime().resize().extra();
 }

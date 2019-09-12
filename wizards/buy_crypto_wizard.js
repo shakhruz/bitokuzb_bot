@@ -125,24 +125,26 @@ buyStepHandler.action('yes2', (ctx) => {
         console.log("invoice sent")
 
         // Исполняем контракт
-        bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee.fee_sat, (result, arg)=>{
-            console.log("bcoin sent: ", result, arg)
-            if (result) {
-                ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/address/${contract.to_address}`)
-                ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")                
-            } else {
-                ctx.reply(`Произошла ошибка при проведении транзакции: ${arg}`)
-                ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE")
-            }
-        })
+        // bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee.fee_sat, (result, arg)=>{
+        //     console.log("bcoin sent: ", result, arg)
+        //     if (result) {
+        //         ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/address/${contract.to_address}`)
+        //         ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")                
+        //     } else {
+        //         ctx.reply(`Произошла ошибка при проведении транзакции: ${arg}`)
+        //         ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE")
+        //     }
+        //     setTimeout(()=>{
+        //       ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
+        //     }, 3000)
+        // })
 
         return ctx.scene.leave()    
     })   
 })
 
 buyStepHandler.action('no', (ctx) => {
-  let keyboard_buttons = Markup.keyboard(["👍 Купить ₿ Биткоин (BTC)", "📒 Балансы счетов"]).oneTime().resize().extra();
-  ctx.reply(`Что делаем дальше?`, keyboard_buttons)
+  ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
   return ctx.scene.leave()
 })
 
