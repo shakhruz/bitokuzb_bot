@@ -111,13 +111,13 @@ function completeContract(ctx, contract) {
     bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee_sat, (result, arg)=>{
         console.log("bcoin sent: ", result, arg)
         if (result) {
-            ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/address/${contract.to_address}`)
+            ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/tx/${arg}`)
             ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
-            db.updateContract(contract_id, "completed")                
+            db.updateContract(contract.id, "completed")                
         } else {
             ctx.reply(`Произошла ошибка при проведении транзакции: ${arg}`)
             ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE")
-            db.updateContract(contract_id, "error")                
+            db.updateContract(contract.id, "error")                
         }
         setTimeout(()=>{
             ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
