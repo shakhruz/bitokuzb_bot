@@ -262,22 +262,24 @@ bot.hears("📒 Балансы счетов",  (ctx)=> {
 })
 
 bot.hears("✔ Продать Биткоин",  (ctx)=> {
+    sell_crypto(ctx)
 })
 
 function sell_crypto(ctx) {
     console.log("Продать биткоин");
+    ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
     ctx.replyWithMarkdown(`Мы покупаем Биткоин (BTC) и другие крипто-активы. Пожалуйста свяжитесь с @BitcoinTAS. \n\nАдрес для отправки BTC:`)
     ctx.replyWithMarkdown(`199FX9tQJBbf7Nfsr3T6xx28cnrrwuzUZB`)
 }
 
 bot.hears("🆘 Помощь",  (ctx)=> {
-    console.log("Продать биткоин");
     ctx.replyWithMarkdown(`Пожалуйста свяжитесь с @BitcoinTAS по вопросам работы бота.`)
+    ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
 })
 
-// bot.on('sticker', (ctx) => {
-//     ctx.reply(`Код стикера - ${ctx.message.sticker.file_id}`)
-// });
+bot.on('sticker', (ctx) => {
+    ctx.reply(`Код стикера - ${ctx.message.sticker.file_id}`)
+});
 
 //
 // Прием входящего платежа в сумах
