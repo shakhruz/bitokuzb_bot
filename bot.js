@@ -76,7 +76,7 @@ function rawBody(req, res, next) {
 //     response.status(200).send('Signed Webhook Received: ' + event.id)
 // })
 
-app.use(rawBody)
+// app.use(rawBody)
 app.use(router)
 
 app.on('pre_checkout_query', (ctx) => {
