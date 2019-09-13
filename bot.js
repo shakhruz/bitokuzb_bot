@@ -60,19 +60,9 @@ function rawBody(req, res, next) {
 // app.use(rawBody)
 app.use(router)
 
-app.on('pre_checkout_query', (ctx) => {
-    console.log("preCheckoutQuery: ", ctx)  
-    ctx.answerPreCheckoutQuery(false)
-})
-  
-app.on('successful_payment', (ctx) => {
-    console.log(`${ctx.from.username} just paid ${ctx.message.successful_payment.total_amount / 100 } UZS`)
-    console.log("payment: ", ctx.message.successful_payment.total_amount)
-})
-
 bot.on('pre_checkout_query', (ctx) => {
     console.log("preCheckoutQuery: ", ctx)  
-    ctx.answerPreCheckoutQuery(false)
+    ctx.answerPreCheckoutQuery(true)
 })
   
 bot.on('successful_payment', (ctx) => {
