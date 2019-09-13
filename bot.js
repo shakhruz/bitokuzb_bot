@@ -75,9 +75,9 @@ bot.on('pre_checkout_query', (ctx) => {
             ctx.reply(`Пришел ошибочный запрос на платеж: #${checkout_id}. Оплата отклонена.`)
             ctx.answerPreCheckoutQuery(false)
         } else {
-            console.log("pre checkout approved")
             db.updateContract(contract_id, "checkout")
-            ctx.answerPreCheckoutQuery(false)
+            console.log("pre checkout approved")
+            ctx.answerPreCheckoutQuery(true)
         }
     })
 })
