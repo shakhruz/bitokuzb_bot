@@ -108,7 +108,7 @@ bot.on('successful_payment', (ctx) => {
 // Исполнить контракт, отправить крипту
 function completeContract(ctx, contract) {
     // Исполняем контракт
-    bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee.fee_sat, (result, arg)=>{
+    bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee_sat, (result, arg)=>{
         console.log("bcoin sent: ", result, arg)
         if (result) {
             ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/address/${contract.to_address}`)
