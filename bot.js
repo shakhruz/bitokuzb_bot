@@ -96,7 +96,7 @@ bot.on('successful_payment', (ctx) => {
         console.log("контракт по которому пришел платеж: ", contract)
         if (contract == null || contract.sell_amount != amount_paid || contract.status != "checkout") {
             console.log("wrong payment!!!")
-            ctx.reply(`Пришел ошибочный платеж #${ctx.message.successful_payment}. \n` +
+            ctx.reply(`Пришел ошибочный платеж #${ctx.message.successful_payment}. \n\n` +
                         `Непонятно что делать с этой оплатой, пожалуйста перешлите это сообщение администратору @BitcoinTAS.`)
         } else {
             console.log("payment received")
