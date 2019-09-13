@@ -87,7 +87,9 @@ exports.createInvoice = function(qty_sum, contract_id) {
         need_shipping_address: true,
         send_phone_number_to_provider: true,
         send_email_to_provider: true,
-        disable_notification: false
+        disable_notification: false,
+        photo_width: 640,
+        photo_height: 640
     }
 }
 
