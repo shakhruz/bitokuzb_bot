@@ -23,7 +23,7 @@ const rates = require('./rates.js')
 const mode = data.MODE
 const BOT_TOKEN = mode === "PRODUCTION" ? (data.BOT_TOKEN || "") : data.BOT_DEV_TOKEN 
 const PORT = 443 // 443
-const bot = new Telegraf(BOT_TOKEN)
+const bot = new Telegraf(BOT_TOKEN, {webhookReply: true})
 const URL = data.URL
 const admins_id = data.admins_id
 
@@ -57,25 +57,6 @@ function rawBody(req, res, next) {
 		next()
 	})
 }
-
-// router.post('/', function (request, response) {
-//     var event
-//     console.log(request.headers)
-//     try {
-//         event = Webhook.verifyEventBody(
-//             request.rawBody,
-//             request.headers['x-cc-webhook-signature'],
-//             webhookSecret
-//         )
-//         console.log('Получил event: ', event.id)
-//         commerce.processCommerceEvent(event)
-//     } catch (error) {
-//         console.log('Error occured', error)
-//         return response.status(400).send('Webhook Error:' + error.message)
-//     }
-//     response.status(200).send('Signed Webhook Received: ' + event.id)
-// })
-
 // app.use(rawBody)
 app.use(router)
 
@@ -93,16 +74,6 @@ exports.startBot = function () {
     console.log(`startbot, bot token webhook: ${URL}/bot${BOT_TOKEN}`)
     if (mode==="PRODUCTION") {
         console.log("Стартуем в режиме сервера...")
-        // bot.telegram.setWebhook('https://server.tld:8443/secret-path')
-        
-        // app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
-        
-        // app.get('/', (req, res) => {
-        //   console.log("hello world request")
-        //   res.send('Hello World!')
-        // })
-      
-
         app.use(bot.webhookCallback(`/bot${BOT_TOKEN}`))
         bot.telegram.setWebhook(`${URL}/bot${BOT_TOKEN}`);
 
