@@ -81,7 +81,7 @@ exports.checkWallet = function (username, callback) {
 
 exports.getBalance = async function (account, callback) {
     const resultBalance = await wallet.getBalance(account)
-    console.log("balance for ", account, resultBalance)
+    // console.log("balance for ", account, resultBalance)
     callback(Number(resultBalance.confirmed) / 100000000)
 }
 
@@ -110,7 +110,7 @@ exports.getFromReserve = function (username, amount_btc, callback) {
     bestFee.fetchMean().then((fee) => {
         getAccount(username, (account)=>{
             getBalance(data.BTCReserveAccountName, (balance)=> {
-                console.log("Reserve BTC balance: ", balance)
+                // console.log("Reserve BTC balance: ", balance)
                 if (amount_btc > balance) {
                     const message = `Недостаточно средств для перевода ${amount_btc} с резервного счета`
                     console.log(message)
@@ -121,7 +121,7 @@ exports.getFromReserve = function (username, amount_btc, callback) {
                 const to = account.receiveAddress
                 const rate = Math.round(fee * 375)
                 ctx.reply(`Комиссия за перевод: ${rate}sat`)
-                console.log("sending " + value_sat + "SAT to " + to + " fee rate: " + fee)
+                // console.log("sending " + value_sat + "SAT to " + to + " fee rate: " + fee)
                 sendTransaction(data.BTCReserveAccountName, value_sat, to, rate, callback)    
             })
         }) 

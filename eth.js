@@ -15,7 +15,7 @@ const web3_ws = new Web3(new Web3.providers.WebsocketProvider(
     `wss://ethereum.api.nodesmith.io/v1/mainnet/jsonrpc/ws?apiKey=${apiKey}`
 ));
 
-log(`ETH:`.cyan)
+// log(`ETH:`.cyan)
 
 exports.checkWallet = function (user_id, callback) {
     db.getWallet(user_id, "ETH", (result)=>{
@@ -147,10 +147,10 @@ const getCurrentGasPrices = async () => {
       high: response.data.fast / 10
     }
    
-    console.log (`Current ETH Gas Prices (in GWEI):`)
-    console.log(`Low: ${prices.low} (transaction completes in < 30 minutes)`)
-    console.log(`Standard: ${prices.medium} (transaction completes in < 5 minutes)`)
-    console.log(`Fast: ${prices.high} (transaction completes in < 2 minutes)`)
+    // console.log (`Current ETH Gas Prices (in GWEI):`)
+    // console.log(`Low: ${prices.low} (transaction completes in < 30 minutes)`)
+    // console.log(`Standard: ${prices.medium} (transaction completes in < 5 minutes)`)
+    // console.log(`Fast: ${prices.high} (transaction completes in < 2 minutes)`)
    
     return prices
 }

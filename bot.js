@@ -45,18 +45,18 @@ var app = Express()
 // 	res.end("Hello, World!\n\n💚 🔒.js")
 // })
 
-// function rawBody(req, res, next) {
-// 	req.setEncoding('utf8')
-// 	var data = ''
-// 	req.on('data', function (chunk) {
-// 		data += chunk
-// 	})
+function rawBody(req, res, next) {
+	req.setEncoding('utf8')
+	var data = ''
+	req.on('data', function (chunk) {
+		data += chunk
+	})
 
-// 	req.on('end', function () {
-// 		req.rawBody = data
-// 		next()
-// 	})
-// }
+	req.on('end', function () {
+		req.rawBody = data
+		next()
+	})
+}
 
 // router.post('/', function (request, response) {
 //     var event
@@ -76,8 +76,8 @@ var app = Express()
 //     response.status(200).send('Signed Webhook Received: ' + event.id)
 // })
 
-// app.use(rawBody)
-// app.use(router)
+app.use(rawBody)
+app.use(router)
 
 app.on('pre_checkout_query', (ctx) => {
     console.log("preCheckoutQuery: ", ctx)  
