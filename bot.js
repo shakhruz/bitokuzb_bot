@@ -267,14 +267,14 @@ bot.hears("✔ Продать Биткоин",  (ctx)=> {
 
 function sell_crypto(ctx) {
     console.log("Продать биткоин");
-    ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
-    ctx.replyWithMarkdown(`Мы покупаем Биткоин (BTC) и другие крипто-активы. Пожалуйста свяжитесь с @BitcoinTAS. \n\nАдрес для отправки BTC:`)
+    ctx.replyWithSticker("CAADAgADxQADhEATAAE_gjZb-SdSCxYE")
+    ctx.replyWithMarkdown(`Обращайтесь по вопросам продажи крипто активов к @BitcoinTAS.\n\nАдрес для отправки BTC:`)
     ctx.replyWithMarkdown(`199FX9tQJBbf7Nfsr3T6xx28cnrrwuzUZB`)
 }
 
 bot.hears("🆘 Помощь",  (ctx)=> {
-    ctx.replyWithMarkdown(`Пожалуйста свяжитесь с @BitcoinTAS по вопросам работы бота.`)
-    ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
+    ctx.replyWithMarkdown(`Обращайтесь по вопросам продажи крипто активов к @BitcoinTAS по вопросам работы бота.`)
+    ctx.replyWithSticker("CAADAgADwgADhEATAAHsXKC5jxDehhYE")
 })
 
 bot.on('sticker', (ctx) => {
