@@ -77,10 +77,17 @@ exports.createInvoice = function(qty_sum, contract_id) {
         description: 'Первая и самая популярная крипто валюта (крипто актив)',
         currency: 'UZS',
         is_flexible: false,
-        need_shipping_address: false,
+        // need_shipping_address: false,
         prices: [{label: 'Биткоин (BTC)', amount: Math.trunc(qty_sum * 100) }],
         payload: {contract_id},
-        photo_url: "https://cdn.paycom.uz/merchants/8b46bb4b52e4e8e7f396ad673165f66ca85ad5e2.png"
+        photo_url: "https://cdn.paycom.uz/merchants/8b46bb4b52e4e8e7f396ad673165f66ca85ad5e2.png",
+        provider_data: {},
+        need_phone_number: true,
+        need_email: true,
+        need_shipping_address: true,
+        send_phone_number_to_provider: true,
+        send_email_to_provider: true,
+        disable_notification: false
     }
 }
 

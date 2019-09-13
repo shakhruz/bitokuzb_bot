@@ -22,7 +22,7 @@ const rates = require('./rates.js')
 
 const mode = data.MODE
 const BOT_TOKEN = mode === "PRODUCTION" ? (data.BOT_TOKEN || "") : data.BOT_DEV_TOKEN 
-const PORT = 443 // 443
+const PORT = 443
 const bot = new Telegraf(BOT_TOKEN, {webhookReply: true})
 const URL = data.URL
 const admins_id = data.admins_id
@@ -90,8 +90,6 @@ exports.startBot = function () {
           telemetry: true,
           store: require('greenlock-store-fs') 
         }).listen(80, 443)
-
-        // bot.startWebhook(`/bot${BOT_TOKEN}`, null, PORT);
     } else {
         console.log("Стартуем в режиме разработки...")
         bot.telegram.setWebhook("")
