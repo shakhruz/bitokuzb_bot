@@ -294,16 +294,21 @@ exports.buy_crypto = new WizardScene("buy_crypto",
 )
 
 function approveDealMessage(ctx, qty_usd, qty_sum, profit_usd, rate_btc, rate_effective_btc, rate_sum) {
-    ctx.replyWithMarkdown(`📝 Расчет заявки на покупку *${qty_btc}*BTC\n` +
+    if (qty_usd<1) {
+      ctx.replyWithMarkdown("Минимальная сумма покупки 10000 сум. Пожалуйста попробуйте еще раз.")
+      return ctx.scene.back()
+    } else {
+      ctx.replyWithMarkdown(`📝 Расчет заявки на покупку *${qty_btc}*BTC\n` +
         `💵 К оплате: *${utils.shortUSD(qty_usd)}* | *${utils.fullSUM(qty_sum)}*\n` +
         `🙏 Комиссия: ${utils.longUSD(profit_usd)} |${utils.shortSUM(profit_usd * rate_sum)} |${utils.fullBTC(profit_usd / rate_btc)}\n` +
         `👐 Комиссия в %: ${utils.convertCommision(comm)}%\n` +
         `📈 Курс BTC: ${utils.shortUSD(rate_btc)} (${utils.shortSUM(rate_btc * rate_sum)})\n` +
         `💱 Курс BTC с учетом комиссии: ${utils.shortUSD(rate_effective_btc)} (${utils.shortSUM(rate_effective_btc * rate_sum)})\n` +
         `💲 Курс доллара: ${utils.fullSUM(rate_sum)}\n`,
-            Markup.inlineKeyboard([
-                Markup.callbackButton("👌 Устраивает", "yes1"),
-                Markup.callbackButton("👎 Отменить", "no")
+          Markup.inlineKeyboard([
+              Markup.callbackButton("👌 Устраивает", "yes1"),
+              Markup.callbackButton("👎 Отменить", "no")
         ]).extra()
-    )
+      )
+    }
 }
