@@ -102,17 +102,18 @@ function addContract (contract) {
     return result
 }
 
-function getContract(contract_id) {
-    return contracts.getById(contract_id)
+function getContract(contract_id, callback) {
+    contracts.getById(contract_id).then((contract)=> {callback(contract)})
 }
 
 function updateContract(contract_id, new_status) {
     console.log("complete contract: ", contract_id)
-    const contract = contracts.getById(contract_id)
-    if (contract && contract !=null) {
-        contract.status = new_status
-        return contracts.update(contract)
-    }
+    contracts.getById(contract_id).then((contract)=>{
+        if (contract && contract !=null) {
+            contract.status = new_status
+            contracts.update(contract)()
+        }    
+    })
 }
 
 
