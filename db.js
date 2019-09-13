@@ -107,11 +107,13 @@ function getContract(contract_id, callback) {
 }
 
 function updateContract(contract_id, new_status) {
-    console.log("complete contract: ", contract_id)
+    console.log("update contract: ", contract_id, new_status)
     contracts.getById(contract_id).then((contract)=>{
         if (contract && contract !=null) {
             contract.status = new_status
-            contracts.update(contract)()
+            contracts.update(contract).then((result)=>{
+                console.log("updated contracts db: ", result)
+            })
         }    
     })
 }

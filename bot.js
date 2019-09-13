@@ -76,7 +76,7 @@ bot.on('pre_checkout_query', (ctx) => {
             ctx.answerPreCheckoutQuery(false)
         } else {
             console.log("pre checkout approved")
-            db.updateContract(contact_id, "checkout")
+            db.updateContract(contract_id, "checkout")
             ctx.answerPreCheckoutQuery(false)
         }
     })
