@@ -88,18 +88,19 @@ bot.on('successful_payment', (ctx) => {
     console.log(`${ctx.from.username} just paid ${ctx.message.successful_payment.total_amount / 100 } UZS`)
     const amount_paid = Math.trunc(ctx.message.successful_payment.total_amount / 100)
 
-    const contract_id = ctx.message.successful_payment.invoice_payload
+    const contract_id = Number(ctx.message.successful_payment.invoice_payload)
+    const payment_charge_id = ctx.message.successful_payment.provider_payment_charge_id
+    console.log("payment for contract: ", contract_id, " charge_id: ", payment_charge_id)
 
-    db.getContract(contract_id, (contract)=>{
+    db.getContract(contract_id, (contract) => {
+        console.log("контракт по которому пришел платеж: ", contract)
         if (contract == null || contract.sell_amount != amount_paid || contract.status != "checkout") {
             console.log("wrong payment!!!")
             ctx.reply(`Пришел ошибочный платеж #${ctx.message.successful_payment}. \n` +
                         `Непонятно что делать с этой оплатой, пожалуйста перешлите это сообщение администратору @BitcoinTAS.`)
-            ctx.answerPreCheckoutQuery(false)
         } else {
             console.log("payment received")
             completeContract(ctx, contract)
-            ctx.answerPreCheckoutQuery(false)
         }
     })
 })
