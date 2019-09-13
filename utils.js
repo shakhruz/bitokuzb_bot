@@ -72,7 +72,7 @@ exports.createInvoice = function(qty_sum, contract_id) {
     // let token = process.env.mode == "PRODUCTION" ? data.provider_token : data.provider_token_dev
     return {
         provider_token: data.provider_token_live,
-        start_parameter: contract_id,
+        start_parameter: contract_id.toString(),
         title: 'Биткоин (BTC)',
         description: 'Первая и самая популярная крипто валюта (крипто актив)',
         currency: 'UZS',
