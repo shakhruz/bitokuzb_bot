@@ -95,53 +95,6 @@ const DB = new sqlite3.Database(DB_PATH, function(err){
     });
 });
 
-dbSchema = `CREATE TABLE IF NOT EXISTS Users (
-    id text NOT NULL PRIMARY KEY,
-    username text NOT NULL UNIQUE,
-    first_name text,
-    last_name text,
-    language_code text
-);
-
-CREATE TABLE IF NOT EXISTS Wallets (
-    public_key text NOT NULL PRIMARY KEY,
-    token text NOT NULL,
-    user_id text NOT NULL,
-    address text,
-    mnemonic text,
-    private_key text,
-        FOREIGN KEY (user_id) REFERENCES Users(id)
-);
-
-CREATE TABLE IF NOT EXISTS Contracts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    hash text NOT NULL,
-    user_id text NOT NULL,
-    datetime time,
-    sell_coin text NOT NULL,
-    sell_amount text NOT NULL,
-    sell_amount_usd text NOT NULL,
-    buy_coin text NOT NULL,
-    buy_amount text NOT NULL,
-    status text NOT NULL,
-    incoming_tx text,
-    outgoing_tx text,
-    fee_sat INTEGER,
-    fee_usd text,
-    rate_market text,
-    rate_real text, 
-    comm_rate text,
-    comm_usd text,
-    comm_sum text,
-    comm_btc text,
-
-    from_address text,
-    to_address text,
-        FOREIGN KEY (user_id) REFERENCES Users(id)
-        FOREIGN KEY (user_id) REFERENCES Wallets(user_id)
-);
-`
-
 function addContract (contract) {
     // console.log("addContract: ", contract)
     const result = contracts.create(contract)
@@ -149,11 +102,19 @@ function addContract (contract) {
     return result
 }
 
-DB.exec(dbSchema, function(err){
-    if (err) {
-        console.log(err)
+function getContract(contract_id) {
+    return contracts.getById(contract_id)
+}
+
+function updateContract(contract_id, new_status) {
+    console.log("complete contract: ", contract_id)
+    const contract = contracts.getById(contract_id)
+    if (contract && contract !=null) {
+        contract.status = new_status
+        return contracts.update(contract)
     }
-});
+}
+
 
 function addUser(username, id, first_name, last_name, language_code, callback) {
     console.log("add user: ", username, id, first_name, last_name, language_code)
@@ -224,7 +185,31 @@ function addWallet(token, id, public_key, address, private_key, mnemonic, callba
 
 module.exports = {
     addUser, getUser, getWallet, addWallet, AppDAO,
-    dao, UsersTable, WalletsTable, ContractsTable, addContract
+    dao, UsersTable, WalletsTable, ContractsTable, addContract, getContract, updateContract
 }
 
 // DB.close()
+// Старая инициация базы данных
+// dbSchema = `CREATE TABLE IF NOT EXISTS Users (
+//     id text NOT NULL PRIMARY KEY,
+//     username text NOT NULL UNIQUE,
+//     first_name text,
+//     last_name text,
+//     language_code text
+// );
+
+// CREATE TABLE IF NOT EXISTS Wallets (
+//     public_key text NOT NULL PRIMARY KEY,
+//     token text NOT NULL,
+//     user_id text NOT NULL,
+//     address text,
+//     mnemonic text,
+//     private_key text,
+//         FOREIGN KEY (user_id) REFERENCES Users(id)
+// );
+// `
+// DB.exec(dbSchema, function(err){
+//     if (err) {
+//         console.log(err)
+//     }
+// });

@@ -1,5 +1,7 @@
 // contracts.js
 var sha256 = require('js-sha256');
+// status: new, completed, error
+
 
 class ContractsTable {
     constructor(dao) {
@@ -10,17 +12,17 @@ class ContractsTable {
       const sql = `
       CREATE TABLE IF NOT EXISTS Contracts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        hash string NOT NULL,
-        user_id string NOT NULL,
+        hash text NOT NULL,
+        user_id text NOT NULL,
         datetime time,
-        sell_coin string NOT NULL,
-        sell_amount string NOT NULL,
+        sell_coin text NOT NULL,
+        sell_amount text NOT NULL,
         sell_amount_usd text NOT NULL,
-        buy_coin string NOT NULL,
-        buy_amount string NOT NULL,
-        status string NOT NULL,
-        incoming_tx string,
-        outgoing_tx string,
+        buy_coin text NOT NULL,
+        buy_amount text NOT NULL,
+        status text NOT NULL,
+        incoming_tx text,
+        outgoing_tx text,
         fee_sat INTEGER,
         fee_usd text,
         rate_market text,
@@ -30,8 +32,8 @@ class ContractsTable {
         comm_sum text,
         comm_btc text,
     
-        from_address string,
-        to_address string,
+        from_address text,
+        to_address text,
             FOREIGN KEY (user_id) REFERENCES Users(id)
             FOREIGN KEY (user_id) REFERENCES Wallets(user_id)
       );`

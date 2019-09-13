@@ -114,7 +114,7 @@ function replyAddressQuestion(ctx) {
 
 buyStepHandler.action('yes2', (ctx) => {
     console.log("Отправляем заявку на покупку ", ctx.wizard.state)
-    // сохраняем контракт на обмен в базе данных
+    // сохраняем контракт в базе данных
     let contract  = {
         user_id: ctx.from.id,
         sell_coin: "UZCARD", 
@@ -133,7 +133,7 @@ buyStepHandler.action('yes2', (ctx) => {
                 btc: ctx.wizard.state.profit_usd / ctx.wizard.state.real_rate},
         datetime: new Date(),
         from_address: "payme",
-        status: 'waiting for payment'
+        status: "new"
     }
     console.log("contract: ", contract)
     const contract_id = db.addContract(contract).then((contract_result)=> {
@@ -141,24 +141,9 @@ buyStepHandler.action('yes2', (ctx) => {
         const invoice = utils.createInvoice(ctx.wizard.state.qty_sum, contract_result.id)
         console.log("invoice: ", invoice)
         ctx.replyWithInvoice(invoice).then((invoice_result)=>{
-            console.log("invoice result: ", invoice_result)    
-            
-            // Исполняем контракт
-            bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee.fee_sat, (result, arg)=>{
-                console.log("bcoin sent: ", result, arg)
-                if (result) {
-                    ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/address/${contract.to_address}`)
-                    ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")                
-                } else {
-                    ctx.reply(`Произошла ошибка при проведении транзакции: ${arg}`)
-                    ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE")
-                }
-                setTimeout(()=>{
-                  ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
-                }, 3000)
-                return ctx.scene.leave()    
-              })
+            console.log("invoice result: ", invoice_result)                
         })
+        return ctx.scene.leave()
     })   
 })
 

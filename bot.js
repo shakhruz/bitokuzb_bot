@@ -60,15 +60,68 @@ function rawBody(req, res, next) {
 // app.use(rawBody)
 app.use(router)
 
+// Запрос от платежа на проверку заказа, нужно сравнить заказ с записью в базе и если все ок, то подтвердить его
 bot.on('pre_checkout_query', (ctx) => {
-    console.log("preCheckoutQuery: ", ctx)  
-    ctx.answerPreCheckoutQuery(true)
+    console.log("preCheckoutQuery: ", ctx.update) 
+    console.log("precheckout from:", ctx.update.pre_checkout_query.from)
+    const currency = ctx.update.pre_checkout_query.currency
+    const checkout_id = ctx.update.pre_checkout_query.id
+    const checkout_amount = ctx.update.total_amount
+    const contract_id = Number(ctx.update.invoice_payload)
+    console.log("contract_id for this checkout: ", contract_id)
+
+    db.getContract(contract_id, (contract)=>{
+        if (contract == null || contract.sell_amount != checkout_amount || contract.status != "new" || currency != "UZS") {
+            ctx.reply(`Пришел ошибочный запрос на платеж: #${checkout_id}. Оплата отклонена.`)
+            ctx.answerPreCheckoutQuery(false)
+        } else {
+            console.log("pre checkout approved")
+            db.updateContract(contact_id, "checkout")
+            ctx.answerPreCheckoutQuery(false)
+        }
+    })
 })
-  
+
+// Пришел платеж от пользователя, нужно найти контракт, исполнить его и изменить статус
 bot.on('successful_payment', (ctx) => {
+    console.log("successful payment: ", ctx.message.successful_payment)
     console.log(`${ctx.from.username} just paid ${ctx.message.successful_payment.total_amount / 100 } UZS`)
-    console.log("payment: ", ctx.message.successful_payment.total_amount)
+    const amount_paid = Math.trunc(ctx.message.successful_payment.total_amount / 100)
+
+    const contract_id = ctx.message.successful_payment.invoice_payload
+
+    db.getContract(contract_id, (contract)=>{
+        if (contract == null || contract.sell_amount != amount_paid || contract.status != "checkout") {
+            console.log("wrong payment!!!")
+            ctx.reply(`Пришел ошибочный платеж #${ctx.message.successful_payment}. \n` +
+                        `Непонятно что делать с этой оплатой, пожалуйста перешлите это сообщение администратору @BitcoinTAS.`)
+            ctx.answerPreCheckoutQuery(false)
+        } else {
+            console.log("payment received")
+            completeContract(ctx, contract)
+            ctx.answerPreCheckoutQuery(false)
+        }
+    })
 })
+
+function completeContract(ctx, contract) {
+    // Исполняем контракт
+    bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee.fee_sat, (result, arg)=>{
+        console.log("bcoin sent: ", result, arg)
+        if (result) {
+            ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/address/${contract.to_address}`)
+            ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
+            db.updateContract(contract_id, "completed")                
+        } else {
+            ctx.reply(`Произошла ошибка при проведении транзакции: ${arg}`)
+            ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE")
+            db.updateContract(contract_id, "error")                
+        }
+        setTimeout(()=>{
+            ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
+        }, 3000)
+    })
+}
 
 exports.startBot = function () {
     console.log(`startbot, bot token webhook: ${URL}/bot${BOT_TOKEN}`)
