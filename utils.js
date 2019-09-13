@@ -79,17 +79,17 @@ exports.createInvoice = function(qty_sum, contract_id) {
         is_flexible: false,
         // need_shipping_address: false,
         prices: [{label: 'Биткоин (BTC)', amount: Math.trunc(qty_sum * 100) }],
-        payload: {contract_id},
+        payload: {contract_id: contract_id},
         photo_url: "https://cdn.paycom.uz/merchants/8b46bb4b52e4e8e7f396ad673165f66ca85ad5e2.png",
-        provider_data: {},
-        need_phone_number: true,
-        need_email: true,
-        need_shipping_address: true,
-        send_phone_number_to_provider: true,
-        send_email_to_provider: true,
+        provider_data: {contract_id: contract_id},
+        need_phone_number: false,
+        need_email: false,
+        need_shipping_address: false,
+        send_phone_number_to_provider: false,
+        send_email_to_provider: false,
         disable_notification: false,
-        photo_width: 640,
-        photo_height: 640
+        photo_width: 320,
+        photo_height: 320
     }
 }
 

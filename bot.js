@@ -62,7 +62,7 @@ app.use(router)
 
 app.on('pre_checkout_query', (ctx) => {
     console.log("preCheckoutQuery: ", ctx)  
-    ctx.answerPreCheckoutQuery(true)
+    ctx.answerPreCheckoutQuery(false)
 })
   
 app.on('successful_payment', (ctx) => {
