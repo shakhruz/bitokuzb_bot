@@ -70,6 +70,16 @@ app.on('successful_payment', (ctx) => {
     console.log("payment: ", ctx.message.successful_payment.total_amount)
 })
 
+bot.on('pre_checkout_query', (ctx) => {
+    console.log("preCheckoutQuery: ", ctx)  
+    ctx.answerPreCheckoutQuery(false)
+})
+  
+bot.on('successful_payment', (ctx) => {
+    console.log(`${ctx.from.username} just paid ${ctx.message.successful_payment.total_amount / 100 } UZS`)
+    console.log("payment: ", ctx.message.successful_payment.total_amount)
+})
+
 exports.startBot = function () {
     console.log(`startbot, bot token webhook: ${URL}/bot${BOT_TOKEN}`)
     if (mode==="PRODUCTION") {
