@@ -23,7 +23,7 @@ const rates = require('./rates.js')
 const mode = data.MODE
 const BOT_TOKEN = mode === "PRODUCTION" ? (data.BOT_TOKEN || "") : data.BOT_DEV_TOKEN 
 const PORT = 443
-const bot = new Telegraf(BOT_TOKEN, {webhookReply: true})
+const bot = new Telegraf(BOT_TOKEN)
 const URL = data.URL
 const admins_id = data.admins_id
 
@@ -60,71 +60,6 @@ function rawBody(req, res, next) {
 // app.use(rawBody)
 app.use(router)
 
-// Запрос от платежа на проверку заказа, нужно сравнить заказ с записью в базе и если все ок, то подтвердить его
-bot.on('pre_checkout_query', (ctx) => {
-    console.log("preCheckoutQuery: ", ctx.update) 
-    console.log("precheckout from:", ctx.update.pre_checkout_query.from)
-    const currency = ctx.update.pre_checkout_query.currency
-    const checkout_id = ctx.update.pre_checkout_query.id
-    const checkout_amount = ctx.update.pre_checkout_query.total_amount / 100
-    const contract_id = Number(ctx.update.pre_checkout_query.invoice_payload)
-    console.log("contract_id for this checkout: ", contract_id)
-
-    db.getContract(contract_id, (contract)=>{
-        if (!contract || contract == null || contract.sell_amount != checkout_amount || contract.status != "new" || currency != "UZS") {
-            ctx.reply(`Пришел ошибочный запрос на платеж: #${checkout_id}. Оплата отклонена.`)
-            ctx.answerPreCheckoutQuery(false)
-        } else {
-            db.updateContract(contract_id, "checkout")
-            console.log("pre checkout approved")
-            ctx.answerPreCheckoutQuery(true)
-        }
-    })
-})
-
-// Пришел платеж от пользователя, нужно найти контракт, исполнить его и изменить статус
-bot.on('successful_payment', (ctx) => {
-    console.log("successful payment: ", ctx.message.successful_payment)
-    console.log(`${ctx.from.username} just paid ${ctx.message.successful_payment.total_amount / 100 } UZS`)
-    const amount_paid = Math.trunc(ctx.message.successful_payment.total_amount / 100)
-
-    const contract_id = Number(ctx.message.successful_payment.invoice_payload)
-    const payment_charge_id = ctx.message.successful_payment.provider_payment_charge_id
-    console.log("payment for contract: ", contract_id, " charge_id: ", payment_charge_id)
-
-    db.getContract(contract_id, (contract) => {
-        console.log("контракт по которому пришел платеж: ", contract)
-        if (!contract || contract == null || contract.sell_amount != amount_paid || contract.status != "checkout") {
-            console.log("wrong payment!!!")
-            ctx.reply(`Пришел ошибочный платеж #${ctx.message.successful_payment}. \n\n` +
-                        `Непонятно что делать с этой оплатой, пожалуйста перешлите это сообщение администратору @BitcoinTAS.`)
-        } else {
-            console.log("payment received")
-            completeContract(ctx, contract)
-        }
-    })
-})
-
-// Исполнить контракт, отправить крипту
-function completeContract(ctx, contract) {
-    // Исполняем контракт
-    bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee_sat, (result, arg)=>{
-        console.log("bcoin sent: ", result, arg)
-        if (result) {
-            ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/tx/${arg}`)
-            ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
-            db.updateContract(contract.id, "completed")                
-        } else {
-            ctx.reply(`Произошла ошибка при проведении транзакции: ${arg}`)
-            ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE")
-            db.updateContract(contract.id, "error")                
-        }
-        setTimeout(()=>{
-            ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
-        }, 3000)
-    })
-}
-
 exports.startBot = function () {
     console.log(`startbot, bot token webhook: ${URL}/bot${BOT_TOKEN}`)
     if (mode==="PRODUCTION") {
@@ -155,8 +90,6 @@ exports.startBot = function () {
         // })
     }      
 }
-
-
 this.startBot()
 
 // Start Bot
@@ -172,7 +105,7 @@ bot.start(ctx => {
    
     setTimeout(()=>{
         welcomeUser(ctx)  
-        let keyboard_buttons = Markup.keyboard(["👍 Купить ₿ Биткоин (BTC)", "📒 Балансы счетов"]).oneTime().resize().extra();
+        let keyboard_buttons = Markup.keyboard(["👍 Купить ₿ Биткоин (BTC)", "✔ Продать Биткоин", "📒 Балансы счетов", "🆘 Помощь"]).oneTime().resize().extra();
         ctx.replyWithMarkdown("Приветствуем Вас в нашем Крипто-Дукане!", keyboard_buttons)                    
     }, 2000)
 })
@@ -325,9 +258,92 @@ bot.hears("📒 Балансы счетов",  (ctx)=> {
     }, 1000)
 })
 
-bot.on('sticker', (ctx) => {
-    ctx.reply(`Код стикера - ${ctx.message.sticker.file_id}`)
-});
+bot.hears("✔ Продать Биткоин",  (ctx)=> {
+    console.log("Продать биткоин");
+    ctx.replyWithMarkdown(`Мы покупаем Биткоин (BTC) и другие крипто-активы. Пожалуйста свяжитесь с @BitcoinTAS. \n\nАдрес для отправки BTC:`)
+    ctx.replyWithMarkdown(`199FX9tQJBbf7Nfsr3T6xx28cnrrwuzUZB`)
+})
+
+bot.hears("🆘 Помощь",  (ctx)=> {
+    console.log("Продать биткоин");
+    ctx.replyWithMarkdown(`Пожалуйста свяжитесь с @BitcoinTAS по вопросам работы бота.`)
+})
+
+// bot.on('sticker', (ctx) => {
+//     ctx.reply(`Код стикера - ${ctx.message.sticker.file_id}`)
+// });
+
+//
+// Прием входящего платежа в сумах
+//
+
+// Запрос от платежа на проверку заказа, нужно сравнить заказ с записью в базе и если все ок, то подтвердить его
+bot.on('pre_checkout_query', (ctx) => {
+    console.log("preCheckoutQuery: ", ctx.update) 
+    console.log("precheckout from:", ctx.update.pre_checkout_query.from)
+    const currency = ctx.update.pre_checkout_query.currency
+    const checkout_id = ctx.update.pre_checkout_query.id
+    const checkout_amount = ctx.update.pre_checkout_query.total_amount / 100
+    const contract_id = Number(ctx.update.pre_checkout_query.invoice_payload)
+    console.log("contract_id for this checkout: ", contract_id)
+
+    db.getContract(contract_id, (contract)=>{
+        if (!contract || contract == null || contract.sell_amount != checkout_amount || contract.status != "new" || currency != "UZS") {
+            ctx.reply(`Пришел ошибочный запрос на платеж: #${checkout_id}. Оплата отклонена.`)
+            ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE") // Yaxshi mas
+            ctx.answerPreCheckoutQuery(false)
+        } else {
+            db.updateContract(contract_id, "checkout")
+            console.log("pre checkout approved")
+            ctx.answerPreCheckoutQuery(true)
+        }
+    })
+})
+
+// Пришел платеж от пользователя, нужно найти контракт, исполнить его и изменить статус
+bot.on('successful_payment', (ctx) => {
+    console.log("successful payment: ", ctx.message.successful_payment)
+    console.log(`${ctx.from.username} just paid ${ctx.message.successful_payment.total_amount / 100 } UZS`)
+    const amount_paid = Math.trunc(ctx.message.successful_payment.total_amount / 100)
+
+    const contract_id = Number(ctx.message.successful_payment.invoice_payload)
+    const payment_charge_id = ctx.message.successful_payment.provider_payment_charge_id
+    console.log("payment for contract: ", contract_id, " charge_id: ", payment_charge_id)
+
+    db.getContract(contract_id, (contract) => {
+        console.log("контракт по которому пришел платеж: ", contract)
+        if (!contract || contract == null || contract.sell_amount != amount_paid || contract.status != "checkout") {
+            console.log("wrong payment!!!")
+            ctx.reply(`Пришел ошибочный платеж #${ctx.message.successful_payment}. \n\n` +
+                        `Непонятно что делать с этой оплатой, пожалуйста перешлите это сообщение администратору @BitcoinTAS.`)
+            ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE") // Yaxshi mas
+        } else {
+            console.log("payment received")
+            completeContract(ctx, contract)
+        }
+    })
+})
+
+// Исполнить контракт, отправить крипту
+function completeContract(ctx, contract) {
+    // Исполняем контракт
+    bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee_sat, (result, arg)=>{
+        console.log("bcoin sent: ", result, arg)
+        if (result) {
+            ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/tx/${arg}`)
+            ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
+            db.updateContract(contract.id, "completed")                
+        } else {
+            ctx.reply(`Произошла ошибка при проведении транзакции: ${arg}`)
+            ctx.replyWithSticker("CAADAgAD1QADhEATAAHlqbT_Fg_mEBYE") // Yaxshi mas
+            db.updateContract(contract.id, "error")                
+        }
+        setTimeout(()=>{
+            ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
+        }, 3000)
+    })
+}
+
 
 // Тесты
 
