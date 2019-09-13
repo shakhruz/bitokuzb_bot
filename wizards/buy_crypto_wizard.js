@@ -270,7 +270,7 @@ exports.buy_crypto = new WizardScene("buy_crypto",
             `📈 Курс BTC: ${utils.shortUSD(ctx.wizard.state.real_rate)} (${utils.shortSUM(ctx.wizard.state.real_rate * sum_rate)})\n` +
             `💱 Курс BTC с учетом комиссии: ${utils.shortUSD(ctx.wizard.state.rate_usd)} (${utils.shortSUM(ctx.wizard.state.rate_usd * sum_rate)})\n` +
             `💲  Курс доллара: ${utils.fullSUM(sum_rate)}\n` +
-            `🏠 Адрес отправки BTC: ${ctx.wizard.state.address}` +
+            `🏠 Адрес отправки BTC: ${ctx.wizard.state.address}\n` +
             `🐎 Комиссия за перевод: ${Math.trunc(ctx.wizard.state.fee_sat)}sat/byte (${utils.longUSD(ctx.wizard.state.fee_usd)})`,
           Markup.inlineKeyboard([
             Markup.callbackButton("✔ Да", "yes2"),

@@ -66,8 +66,8 @@ bot.on('pre_checkout_query', (ctx) => {
     console.log("precheckout from:", ctx.update.pre_checkout_query.from)
     const currency = ctx.update.pre_checkout_query.currency
     const checkout_id = ctx.update.pre_checkout_query.id
-    const checkout_amount = ctx.update.total_amount
-    const contract_id = Number(ctx.update.invoice_payload)
+    const checkout_amount = ctx.update.pre_checkout_query.total_amount / 100
+    const contract_id = Number(ctx.update.pre_checkout_query.invoice_payload)
     console.log("contract_id for this checkout: ", contract_id)
 
     db.getContract(contract_id, (contract)=>{
@@ -104,6 +104,7 @@ bot.on('successful_payment', (ctx) => {
     })
 })
 
+// Исполнить контракт, отправить крипту
 function completeContract(ctx, contract) {
     // Исполняем контракт
     bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee.fee_sat, (result, arg)=>{
