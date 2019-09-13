@@ -40,10 +40,10 @@ var app = Express()
 //   res.sendStatus(200);
 // });
 
-// app.use("/test", function(req, res) {
-// 	res.setHeader("Content-Type", "text/html; charset=utf-8")
-// 	res.end("Hello, World!\n\n💚 🔒.js")
-// })
+app.use("/test", function(req, res) {
+	res.setHeader("Content-Type", "text/html; charset=utf-8")
+	res.end("Hello, World!\n\n💚 🔒.js")
+})
 
 function rawBody(req, res, next) {
 	req.setEncoding('utf8')

@@ -143,9 +143,9 @@ CREATE TABLE IF NOT EXISTS Contracts (
 `
 
 function addContract (contract) {
-    console.log("addContract: ", contract)
+    // console.log("addContract: ", contract)
     const result = contracts.create(contract)
-    console.log("new contract result: ", result)
+    // console.log("new contract result: ", result)
     return result
 }
 
