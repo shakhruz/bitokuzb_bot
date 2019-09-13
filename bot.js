@@ -249,6 +249,9 @@ bot.use(stage.middleware())
 
 bot.action("buy_crypto",  enter("buy_crypto"))
 bot.command("buy",  enter("buy_crypto"))
+bot.command("sell",  (ctx)=>{
+    sell_crypto(ctx)
+})
 bot.hears("👍 Купить ₿ Биткоин (BTC)",  enter("buy_crypto"))
 bot.hears("📒 Балансы счетов",  (ctx)=> {
     console.log("Балансы счетов");
@@ -259,10 +262,13 @@ bot.hears("📒 Балансы счетов",  (ctx)=> {
 })
 
 bot.hears("✔ Продать Биткоин",  (ctx)=> {
+})
+
+function sell_crypto(ctx) {
     console.log("Продать биткоин");
     ctx.replyWithMarkdown(`Мы покупаем Биткоин (BTC) и другие крипто-активы. Пожалуйста свяжитесь с @BitcoinTAS. \n\nАдрес для отправки BTC:`)
     ctx.replyWithMarkdown(`199FX9tQJBbf7Nfsr3T6xx28cnrrwuzUZB`)
-})
+}
 
 bot.hears("🆘 Помощь",  (ctx)=> {
     console.log("Продать биткоин");
