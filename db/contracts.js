@@ -55,11 +55,11 @@ class ContractsTable {
     } 
 
     update(contract) {
-        const { id, hash, user_id, time, sell_coin, sell_amount, buy_coin, buy_amount, status, incoming_tx, outgoing_tx, from_address, to_address } = contract
+        const { id, hash, user_id, datetime, sell_coin, sell_amount, buy_coin, buy_amount, status, incoming_tx, outgoing_tx, from_address, to_address } = contract
         return this.dao.run(
-          `UPDATE contracts SET hash = ?, user_id = ?, time =?, sell_coin = ?, sell_amount = ?, buy_coin = ?, buy_amount = ?, status = ?, incoming_tx = ?, outgoing_tx = ?, 
+          `UPDATE contracts SET hash = ?, user_id = ?, datetime =?, sell_coin = ?, sell_amount = ?, buy_coin = ?, buy_amount = ?, status = ?, incoming_tx = ?, outgoing_tx = ?, 
           from_address = ?, to_address = ? WHERE id = ?`,
-          [hash, user_id, time, sell_coin, sell_amount, buy_coin, buy_amount, status, incoming_tx, outgoing_tx, from_address, to_address, id]
+          [hash, user_id, datetime, sell_coin, sell_amount, buy_coin, buy_amount, status, incoming_tx, outgoing_tx, from_address, to_address, id]
         )
     }
 
