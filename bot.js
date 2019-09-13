@@ -71,7 +71,7 @@ bot.on('pre_checkout_query', (ctx) => {
     console.log("contract_id for this checkout: ", contract_id)
 
     db.getContract(contract_id, (contract)=>{
-        if (contract == null || contract.sell_amount != checkout_amount || contract.status != "new" || currency != "UZS") {
+        if (!contract || contract == null || contract.sell_amount != checkout_amount || contract.status != "new" || currency != "UZS") {
             ctx.reply(`Пришел ошибочный запрос на платеж: #${checkout_id}. Оплата отклонена.`)
             ctx.answerPreCheckoutQuery(false)
         } else {
@@ -94,7 +94,7 @@ bot.on('successful_payment', (ctx) => {
 
     db.getContract(contract_id, (contract) => {
         console.log("контракт по которому пришел платеж: ", contract)
-        if (contract == null || contract.sell_amount != amount_paid || contract.status != "checkout") {
+        if (!contract || contract == null || contract.sell_amount != amount_paid || contract.status != "checkout") {
             console.log("wrong payment!!!")
             ctx.reply(`Пришел ошибочный платеж #${ctx.message.successful_payment}. \n\n` +
                         `Непонятно что делать с этой оплатой, пожалуйста перешлите это сообщение администратору @BitcoinTAS.`)
