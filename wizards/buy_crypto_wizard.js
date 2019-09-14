@@ -266,14 +266,14 @@ exports.buy_crypto = new WizardScene("buy_crypto",
         ctx.replyWithMarkdown(
             `📝 *ПОДТВЕРДИТЕ ЗАЯВКУ НА ПОКУПКУ BTC*:\n\n` +
             `💵 К оплате: *${utils.fullSUM(ctx.wizard.state.qty_sum)}*\n` + 
-            ` ₿  Вы получите: *${utils.fullBTC(ctx.wizard.state.qty_btc)}*\n` +
-            `🙏 Комиссия: ${utils.longUSD(ctx.wizard.state.profit_usd)} |${utils.shortSUM(ctx.wizard.state.profit_usd * sum_rate)} |${utils.fullBTC(ctx.wizard.state.profit_usd / ctx.wizard.state.real_rate)}\n` +
+            ` ₿  Вы получите: *${utils.fullBTC(ctx.wizard.state.qty_btc)}* (${utils.shortSAT(ctx.wizard.state.qty_btc * 100000000)})\n` +
+            `🙏 Комиссия: ${utils.longUSD(ctx.wizard.state.profit_usd)} |${utils.shortSUM(ctx.wizard.state.profit_usd * sum_rate)} |${utils.shortSAT(ctx.wizard.state.profit_usd / ctx.wizard.state.real_rate)}\n` +
             `👐 Комиссия за обмен: ${utils.convertCommision(ctx.wizard.state.comm)}%\n` +
             `📈 Курс BTC: ${utils.shortUSD(ctx.wizard.state.real_rate)} (${utils.shortSUM(ctx.wizard.state.real_rate * sum_rate)})\n` +
             `💱 Курс BTC с учетом комиссии: ${utils.shortUSD(ctx.wizard.state.rate_usd)} (${utils.shortSUM(ctx.wizard.state.rate_usd * sum_rate)})\n` +
             `💲  Курс доллара: ${utils.fullSUM(sum_rate)}\n` +
             `🏠 Адрес отправки BTC: ${ctx.wizard.state.address}\n` +
-            `🐎 Комиссия за перевод: ${Math.trunc(ctx.wizard.state.fee_sat)}sat/byte (${utils.longUSD(ctx.wizard.state.fee_usd)})`,
+            `🐎 Комиссия за перевод: ${Math.trunc(ctx.wizard.state.fee_sat)} sat (${utils.longUSD(ctx.wizard.state.fee_usd)})`,
           Markup.inlineKeyboard([
             Markup.callbackButton("✔ Да", "yes2"),
             Markup.callbackButton("❌ Нет", "no")
@@ -300,7 +300,7 @@ function approveDealMessage(ctx, qty_usd, qty_sum, profit_usd, rate_btc, rate_ef
       ctx.replyWithMarkdown("Минимальная сумма покупки 10000 сум. Пожалуйста попробуйте еще раз.")
       return ctx.scene.back()
     } else {
-      ctx.replyWithMarkdown(`📝 Расчет заявки на покупку *${qty_btc}*BTC\n` +
+      ctx.replyWithMarkdown(`📝 РАСЧЕТ ЗАЯВКИ НА ПОКУПКУ *${qty_btc}*btc (${utils.shortSAT(qty_btc * 100000000)})\n\n` +
         `💵 К оплате: *${utils.shortUSD(qty_usd)}* | *${utils.fullSUM(qty_sum)}*\n` +
         `🙏 Комиссия: ${utils.longUSD(profit_usd)} |${utils.shortSUM(profit_usd * rate_sum)} |${utils.fullBTC(profit_usd / rate_btc)}\n` +
         `👐 Комиссия в %: ${utils.convertCommision(comm)}%\n` +

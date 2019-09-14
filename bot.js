@@ -213,9 +213,9 @@ function getETHBalance(address, callback) {
 }
 
 exports.showReserves = function(ctx, callback) {
-    let balance_reply = `*🏦 В Наличии на продажу:*\n`
+    let balance_reply = `*🏦 В НАЛИЧИИ НА ПРОДАЖУ:*\n`
     bcoin.getBalance(data.BTCReserveAccountName, (balance)=> {
-        balance_reply += `\n*${balance}* BTC | ${utils.shortUSD(balance*rates.crypto().BTC)}`
+        balance_reply += `\n*${balance}*btc (${utils.shortSAT(balance * 100000000)})| ${utils.shortUSD(balance*rates.crypto().BTC)}`
         minter.getBIPBalance(data.BIPReserveAddress, (BIPBalance) => {
             // balance_reply += `\n*${BIPBalance}* BIP  | ${utils.shortUSD(BIPBalance*rates.minter().bipPriceUsd)}`
             eth.getBalance(data.ethAddress, (ETHBalance) => {

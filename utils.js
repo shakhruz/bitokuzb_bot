@@ -36,11 +36,11 @@ exports.convertCommision = function(comm) {
 }
 
 exports.shortBTC = function (qty_btc) {
-    return Number(qty_btc).toFixed(4) + "BTC"
+    return Number(qty_btc).toFixed(4) + "btc"
 }
 
 exports.fullBTC = function (qty_btc) {
-    return Number(qty_btc).toFixed(8) + "BTC"
+    return Number(qty_btc).toFixed(8) + "btc"
 }
 
 exports.mBTC = function (qty_btc) {
@@ -60,11 +60,16 @@ exports.longUSD = function (qty_usd) {
 }
 
 exports.fullSUM = function (num) {
-    return Math.trunc(num).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' SUM'
+    return Math.trunc(num).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' sum'
 }
 
 exports.shortSUM = function (num) {
-    return (Math.round(num/1000)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k SUM'
+    return (Math.round(num/1000)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k sum'
+}
+
+exports.shortSAT = function (num) {
+    return (Math.round(num/1000)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k sat'
+    // return (Math.round(num/1000)).toString() + 'k sat'
 }
 
 
@@ -74,7 +79,7 @@ exports.createInvoice = function(qty_sum, contract_id) {
         provider_token: data.provider_token_live,
         start_parameter: contract_id,
         title: 'Биткоин (BTC)',
-        description: 'Первая и самая популярная крипто валюта (крипто актив)',
+        description: `${this.fullBTC()}`,
         currency: 'UZS',
         is_flexible: false,
         // need_shipping_address: false,
