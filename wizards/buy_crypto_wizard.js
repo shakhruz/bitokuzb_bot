@@ -164,17 +164,18 @@ exports.buy_crypto = new WizardScene("buy_crypto",
     console.log("buy crypto start...")
     rates.updateRates()
     rates.updateUZSRate()
-    bot.showReserves(ctx)
+    bot.showReserves(ctx, ()=>{
+      ctx.replyWithMarkdown(
+        `*₿🚀👍🔥 Покупка Биткоина*.\n\n1. Шаг 1/4 - В какой валюте рассчитать покупку?`,
+          Markup.inlineKeyboard([
+            Markup.callbackButton("₿ BTC", "fromBTC"),
+            Markup.callbackButton("💵 USD", "fromUSD"),
+            Markup.callbackButton("💴 SUM", "fromSUM")
+          ]).extra()
+      )
+      return ctx.wizard.next()  
+    })
 
-    ctx.replyWithMarkdown(
-      `*Покупка Биткоина*.\n\n1. Шаг 1/4 - В какой валюте рассчитать покупку?`,
-        Markup.inlineKeyboard([
-          Markup.callbackButton("₿ BTC", "fromBTC"),
-          Markup.callbackButton("💵 USD", "fromUSD"),
-          Markup.callbackButton("💴 SUM", "fromSUM")
-        ]).extra()
-    )
-    return ctx.wizard.next()
   },
   buyStepHandler,
   ctx => {

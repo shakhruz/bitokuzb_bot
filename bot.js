@@ -158,7 +158,7 @@ function showBalances(ctx, btcWallet, ethwallet, bipwallet ) {
     getBTCBalance(ctx.from.id, ctx.from.username, (m1, b1)=> {
         message += m1
         total += b1
-        ctx.replyWithMarkdown(message)
+        ctx.reply(message)
         // ctx.replyWithMarkdown(message,
         //     Markup.inlineKeyboard([
         //       Markup.callbackButton("₿ Купить Биткоин", "buy_crypto")
@@ -189,7 +189,7 @@ function getBTCBalance(user_id, username, callback) {
     bcoin.checkWallet(user_id, (account) => {
         bcoin.getBalance(user_id, (balance) => {
             console.log("BTC balance: ", balance)
-            callback(`*@${username}*.bitcoin:* ${balance}* BTC | ${utils.shortUSD(balance*rates.crypto().BTC)} | ${utils.shortSUM(balance*rates.crypto().BTC*rates.sum_buy_price())}\n${account.receiveAddress}\n\n`,
+            callback(`БИТКОИН 👛 КОШЕЛЕК 😎@${username} \n\n${balance} BTC | ${utils.shortUSD(balance*rates.crypto().BTC)} | ${utils.shortSUM(balance*rates.crypto().BTC*rates.sum_buy_price())}\n🔒 ${account.receiveAddress}\n\n`,
             balance*rates.crypto().BTC);
         })
     }) 
@@ -212,19 +212,16 @@ function getETHBalance(address, callback) {
     })
 }
 
-function showReserves(ctx) {
-    let balance_reply = `*🏦 В Наличии:*`
+exports.showReserves = function(ctx, callback) {
+    let balance_reply = `*🏦 В Наличии на продажу:*\n`
     bcoin.getBalance(data.BTCReserveAccountName, (balance)=> {
         balance_reply += `\n*${balance}* BTC | ${utils.shortUSD(balance*rates.crypto().BTC)}`
         minter.getBIPBalance(data.BIPReserveAddress, (BIPBalance) => {
             // balance_reply += `\n*${BIPBalance}* BIP  | ${utils.shortUSD(BIPBalance*rates.minter().bipPriceUsd)}`
             eth.getBalance(data.ethAddress, (ETHBalance) => {
                 // balance_reply += `\n*${ETHBalance}* ETH | ${utils.shortUSD(ETHBalance*rates.crypto().ETH)}`
-                ctx.replyWithMarkdown(balance_reply,   
-                    Markup.inlineKeyboard([
-                        Markup.callbackButton("₿ Купить Биткоин", "buy_crypto")
-                    ]).extra()
-                )                
+                ctx.replyWithMarkdown(balance_reply) 
+                callback()               
             })            
         })        
     })
@@ -268,9 +265,9 @@ bot.hears("₿🚀👍🔥 Купить БИТКОИН",  enter("buy_crypto"))
 bot.hears("👛🏆🔒😎 БИТКОИН КОШЕЛЕК",  (ctx)=> {
     console.log("Балансы счетов");
     showAllBalances(ctx,true)
-    setTimeout(()=> {
-        showReserves(ctx)
-    }, 1000)
+    // setTimeout(()=> {
+    //     showReserves(ctx)
+    // }, 1000)
 })
 
 bot.hears("💵🏎️✈️👨‍👧‍👧🌴 Продать БИТКОИН",  (ctx)=> {
@@ -446,6 +443,5 @@ module.exports = {
     sendToAdmins,
     sendMessage,
     sendError,
-    isAdmin,
-    showReserves
+    isAdmin
 }
