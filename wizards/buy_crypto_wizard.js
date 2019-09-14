@@ -164,6 +164,7 @@ exports.buy_crypto = new WizardScene("buy_crypto",
     console.log("buy crypto start...")
     rates.updateRates()
     rates.updateUZSRate()
+    bot.showReserves(ctx)
 
     ctx.replyWithMarkdown(
       `*Покупка Биткоина*.\n\n1. Шаг 1/4 - В какой валюте рассчитать покупку?`,
