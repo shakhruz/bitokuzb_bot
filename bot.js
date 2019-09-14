@@ -288,7 +288,7 @@ function sell_crypto(ctx) {
 }
 
 bot.hears("🆘🤗🍵 Помощь",  (ctx)=> {
-    help()
+    help(ctx)
 })
 
 function help(ctx) {
