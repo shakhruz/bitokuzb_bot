@@ -19,17 +19,17 @@ const bcoin = require('../bcoin.js')
 const buyStepHandler = new Composer()
 buyStepHandler.action('fromBTC', (ctx) => {
   ctx.wizard.state.base = "BTC"
-  ctx.reply('2. Шаг 2/4. Укажите сумму биткоинов (BTC) для покупки (0.001 - 1)')
+  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*Укажите сумму биткоинов (BTC) для покупки (0.001 - 1)* от $1 до $1000')
   return ctx.wizard.next()
 })  
 buyStepHandler.action('fromUSD', (ctx) => {
   ctx.wizard.state.base = "USD"
-  ctx.reply('2. Шаг 2/4. На какую сумму в Долларах хотите купить BTC?')
+  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*На какую сумму в Долларах хотите купить BTC?* от $1 до $1000')
   return ctx.wizard.next()
 })
 buyStepHandler.action('fromSUM', (ctx) => {
   ctx.wizard.state.base = "SUM"
-  ctx.reply('2. Шаг 2/4. На какую сумму в Cумах хотите купить BTC?')
+  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*На какую сумму в Cумах хотите купить BTC?* от 10тыс сум до 10млн сум')
   return ctx.wizard.next()
 })
 
@@ -43,7 +43,7 @@ buyStepHandler.action('yes1', (ctx) => {
         const fee_low_usd = fees_low * rates.crypto().BTC / 100000000
         ctx.wizard.state.fees = {high: fees_high, low: fees_low, fee_high_usd: fee_high_usd, fee_low_usd: fee_low_usd}
         console.log("fees: ", ctx.wizard.state.fees)
-        ctx.reply(`3. Шаг 3/4. Желаете ускореннную отправку или стандартную?`,
+        ctx.replyWithMarkdown(`₿🚀👍🔥 ПОКУПКА БИТКОИНА 3/4\n\n*Желаете ускореннную отправку или стандартную?*`,
             Markup.inlineKeyboard([
                 Markup.callbackButton(`Ускоренная (${utils.longUSD(fee_high_usd)})`, "fast"),
                 Markup.callbackButton(`Стандартная (${utils.longUSD(fee_low_usd)})`, "regular")
@@ -65,7 +65,7 @@ buyStepHandler.action('regular', (ctx) => {
         ctx.wizard.state.qty_btc = ctx.wizard.state.qty_btc - ctx.wizard.state.fee_sat / 100000000
     } 
 
-    ctx.reply(`4. Шаг 4/4. На какой адрес отправить купленные BTC?`);
+    ctx.replyWithMarkdown(`₿🚀👍🔥 ПОКУПКА БИТКОИНА 4/4\n\n На какой адрес отправить купленные BTC?`);
     return ctx.wizard.next();
     
     // bcoin.checkWallet(ctx.from.id, (account) => {
@@ -89,7 +89,7 @@ buyStepHandler.action('fast', (ctx) => {
         ctx.wizard.state.qty_btc = ctx.wizard.state.qty_btc - ctx.wizard.state.fee_sat / 100000000
     }     
 
-    ctx.reply(`4. Шаг 4/4. На какой адрес отправить купленные BTC?`);
+    ctx.reply(`₿🚀👍🔥 ПОКУПКА БИТКОИНА 4/4\n\n*На какой адрес отправить купленные BTC?*\n\nВведите адрес 👇`);
     return ctx.wizard.next();
 
     // bcoin.checkWallet(ctx.from.id, (account) => {
@@ -107,7 +107,7 @@ function replyAddressQuestion(ctx) {
         ctx.wizard.state.address = account.receiveAddress
         console.log("found internal btc addr: ", account.receiveAddress)
         let keyboard_buttons = Markup.keyboard([account.receiveAddress]).oneTime().resize().extra();
-        ctx.replyWithMarkdown('*4. Шаг 4/4. На какой адрес отправить купленные BTC?*\n\nВведите адрес в поле или выберите адрес вашего счета в bitok.uz ниже 👇', 
+        ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 4/4\n\n*На какой адрес отправить купленные BTC?*\n\nВведите адрес 👇', 
                             keyboard_buttons)
     }) 
 }
@@ -148,7 +148,7 @@ buyStepHandler.action('yes2', (ctx) => {
 })
 
 buyStepHandler.action('no', (ctx) => {
-  ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
+  // ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
   return ctx.scene.leave()
 })
 
@@ -166,7 +166,7 @@ exports.buy_crypto = new WizardScene("buy_crypto",
     rates.updateUZSRate()
     bot.showReserves(ctx, ()=>{
       ctx.replyWithMarkdown(
-        `*₿🚀👍🔥 Покупка Биткоина*.\n\n1. Шаг 1/4 - В какой валюте рассчитать покупку?`,
+        `₿🚀👍🔥 ПОКУПКА БИТКОИНА 1/4\n\n*В какой валюте рассчитать покупку?*`,
           Markup.inlineKeyboard([
             Markup.callbackButton("₿ BTC", "fromBTC"),
             Markup.callbackButton("💵 USD", "fromUSD"),
@@ -264,7 +264,7 @@ exports.buy_crypto = new WizardScene("buy_crypto",
       if (valid) {
         ctx.wizard.state.address = ctx.message.text;
         ctx.replyWithMarkdown(
-            `📝 *Подтвердите заявку на покупку BTC*:\n\n` +
+            `📝 *ПОДТВЕРДИТЕ ЗАЯВКУ НА ПОКУПКУ BTC*:\n\n` +
             `💵 К оплате: *${utils.fullSUM(ctx.wizard.state.qty_sum)}*\n` + 
             ` ₿  Вы получите: *${utils.fullBTC(ctx.wizard.state.qty_btc)}*\n` +
             `🙏 Комиссия: ${utils.longUSD(ctx.wizard.state.profit_usd)} |${utils.shortSUM(ctx.wizard.state.profit_usd * sum_rate)} |${utils.fullBTC(ctx.wizard.state.profit_usd / ctx.wizard.state.real_rate)}\n` +
