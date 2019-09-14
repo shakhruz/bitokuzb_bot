@@ -94,5 +94,5 @@ exports.createInvoice = function(qty_sum, contract_id) {
 }
 
 exports.main_menu_keyboard = function () {
-    return Markup.keyboard(["👍 Купить ₿ Биткоин (BTC)", "📒 Балансы счетов"]).oneTime().resize().extra();
+    return Markup.keyboard(["₿🚀👍🔥 Купить БИТКОИН", "💵🏎️✈️👨‍👧‍👧🌴 Продать БИТКОИН", "👛🏆🔒😎 БИТКОИН КОШЕЛЕК", "🆘🤗🍵 Помощь"]).oneTime().resize().extra();
 }

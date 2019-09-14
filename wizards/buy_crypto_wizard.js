@@ -148,7 +148,7 @@ buyStepHandler.action('yes2', (ctx) => {
 })
 
 buyStepHandler.action('no', (ctx) => {
-  // ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
+  ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
   return ctx.scene.leave()
 })
 
@@ -257,7 +257,7 @@ exports.buy_crypto = new WizardScene("buy_crypto",
     if (ctx.wizard.state.address!=null) {
         ctx.message = {text: ctx.wizard.state.address}
     }
-    // console.log("полученный текст: ", ctx.message.sticker)
+    console.log("полученный текст: ", ctx.message)
     if (ctx.message && ctx.message.text) {
       var valid = WAValidator.validate(ctx.message.text, 'BTC')
       let sum_rate = rates.sum_buy_price()
