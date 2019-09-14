@@ -43,7 +43,7 @@ buyStepHandler.action('yes1', (ctx) => {
         const fee_low_usd = fees_low * rates.crypto().BTC / 100000000
         ctx.wizard.state.fees = {high: fees_high, low: fees_low, fee_high_usd: fee_high_usd, fee_low_usd: fee_low_usd}
         console.log("fees: ", ctx.wizard.state.fees)
-        ctx.replyWithMarkdown(`₿🚀👍🔥 ПОКУПКА БИТКОИНА 3/4\n\n*Желаете УСКОРЕННУЮ отправку или СТАНДАРТНУЮ?*\n\nУскоренная доходит за ~10-20мин, Стандартная за ~1-3ч.`,
+        ctx.replyWithMarkdown(`₿🚀👍🔥 ПОКУПКА БИТКОИНА 3/4\n\n*Желаете УСКОРЕННУЮ отправку или СТАНДАРТНУЮ?*\n\nУскоренная доходит за ~10-60мин, Стандартная - от 1ч.`,
             Markup.inlineKeyboard([
                 Markup.callbackButton(`🚀 УСКОРЕННУЮ (${utils.longUSD(fee_high_usd)})`, "fast"),
                 Markup.callbackButton(`🚗 СТАНДАРТНУЮ (${utils.longUSD(fee_low_usd)})`, "regular")
