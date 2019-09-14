@@ -189,7 +189,11 @@ function getBTCBalance(user_id, username, callback) {
     bcoin.checkWallet(user_id, (account) => {
         bcoin.getBalance(user_id, (balance) => {
             console.log("BTC balance: ", balance)
-            callback(`БИТКОИН 👛 КОШЕЛЕК 😎@${username} \n\n${balance} BTC | ${utils.shortUSD(balance*rates.crypto().BTC)} | ${utils.shortSUM(balance*rates.crypto().BTC*rates.sum_buy_price())}\n🔒 ${account.receiveAddress}\n\n`,
+            const balance_sat = balance*100000000;
+            const balance_usd = balance*rates.crypto().BTC
+            const balance_sum = balance*rates.crypto().BTC * rates.sum_buy_price();
+            callback(`БИТКОИН 👛 КОШЕЛЕК 😎@${username}\n\n${utils.shortSAT(balance_sat)} (${balance}btc) | ${utils.shortSUM(balance_sum)} | ${utils.shortUSD(balance_usd)}\n🔒 ${account.receiveAddress}`,
+            // callback(`${username} \n\n${utils.shortSAT(balance_sat)} (${balance}btc) | ${utils.shortSUM(balance_sum)} | ${utils.shortUSD(balance_usd)}\n ${account.receiveAddress}`,
             balance*rates.crypto().BTC);
         })
     }) 
@@ -213,9 +217,9 @@ function getETHBalance(address, callback) {
 }
 
 exports.showReserves = function(ctx, callback) {
-    let balance_reply = `*🏦 В НАЛИЧИИ НА ПРОДАЖУ:*\n`
+    let balance_reply = `*🏦 В НАЛИЧИИ НА ПРОДАЖУ:*\n\n`
     bcoin.getBalance(data.BTCReserveAccountName, (balance)=> {
-        balance_reply += `\n*${balance}*btc (${utils.shortSAT(balance * 100000000)})| ${utils.shortUSD(balance*rates.crypto().BTC)}`
+        balance_reply += `${utils.shortSAT(balance * 100000000)} (${balance}*btc) | ${utils.shortUSD(balance*rates.crypto().BTC)}`
         minter.getBIPBalance(data.BIPReserveAddress, (BIPBalance) => {
             // balance_reply += `\n*${BIPBalance}* BIP  | ${utils.shortUSD(BIPBalance*rates.minter().bipPriceUsd)}`
             eth.getBalance(data.ethAddress, (ETHBalance) => {

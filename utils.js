@@ -60,26 +60,49 @@ exports.longUSD = function (qty_usd) {
 }
 
 exports.fullSUM = function (num) {
-    return Math.trunc(num).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + ' sum'
+    return Math.trunc(num).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'sum'
 }
 
 exports.shortSUM = function (num) {
-    return (Math.round(num/1000)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k sum'
+    let result
+    if (num > 10000000) {
+        result = Math.trunc(num/1000000).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'mln sum'
+    } else {
+        if (num > 10000) {
+            result = Math.round(num/1000).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k sum'
+        } else {
+            result = Math.trunc(num).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'sum'
+        }
+    }
+    return result 
+    // return (Math.round(num/1000)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k sum'
 }
 
 exports.shortSAT = function (num) {
-    return (Math.round(num/1000)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k sat'
+    console.log("shortsat: ", num)
+    let result
+    if (num > 10000000) {
+        result = Math.trunc(num/1000000).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'mln sat'
+    } else {
+        if (num > 100000) {
+            result = Math.round(num/1000).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k sat'
+        } else {
+            result = Math.trunc(num).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'sat'
+        }
+    }
+    return result 
+    // return (Math.round(num/1000)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ') + 'k sat'
     // return (Math.round(num/1000)).toString() + 'k sat'
 }
 
 
-exports.createInvoice = function(qty_sum, contract_id) {
+exports.createInvoice = function(qty_sum, qty_btc, contract_id) {
     // let token = process.env.mode == "PRODUCTION" ? data.provider_token : data.provider_token_dev
     return {
         provider_token: data.provider_token_live,
         start_parameter: contract_id,
         title: 'Биткоин (BTC)',
-        description: `${this.fullBTC()}`,
+        description: `${this.shortSAT(qty_btc * 100000000)}`,
         currency: 'UZS',
         is_flexible: false,
         // need_shipping_address: false,

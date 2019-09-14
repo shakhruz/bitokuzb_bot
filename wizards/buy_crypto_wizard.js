@@ -43,10 +43,10 @@ buyStepHandler.action('yes1', (ctx) => {
         const fee_low_usd = fees_low * rates.crypto().BTC / 100000000
         ctx.wizard.state.fees = {high: fees_high, low: fees_low, fee_high_usd: fee_high_usd, fee_low_usd: fee_low_usd}
         console.log("fees: ", ctx.wizard.state.fees)
-        ctx.replyWithMarkdown(`₿🚀👍🔥 ПОКУПКА БИТКОИНА 3/4\n\n*Желаете ускореннную отправку или стандартную?*`,
+        ctx.replyWithMarkdown(`₿🚀👍🔥 ПОКУПКА БИТКОИНА 3/4\n\n*Желаете УСКОРЕННУЮ отправку или СТАНДАРТНУЮ?*\n\nУскоренная доходит за ~10-20мин, Стандартная за ~1-3ч.`,
             Markup.inlineKeyboard([
-                Markup.callbackButton(`Ускоренная (${utils.longUSD(fee_high_usd)})`, "fast"),
-                Markup.callbackButton(`Стандартная (${utils.longUSD(fee_low_usd)})`, "regular")
+                Markup.callbackButton(`🚀 УСКОРЕННУЮ (${utils.longUSD(fee_high_usd)})`, "fast"),
+                Markup.callbackButton(`🚗 СТАНДАРТНУЮ (${utils.longUSD(fee_low_usd)})`, "regular")
             ]).extra()
         )
         return ctx.wizard.next()    
@@ -138,7 +138,7 @@ buyStepHandler.action('yes2', (ctx) => {
     console.log("contract: ", contract)
     const contract_id = db.addContract(contract).then((contract_result)=> {
         console.log("new contract: ", contract_result)
-        const invoice = utils.createInvoice(ctx.wizard.state.qty_sum, contract_result.id)
+        const invoice = utils.createInvoice(ctx.wizard.state.qty_sum, ctx.wizard.state.qty_btc, contract_result.id)
         console.log("invoice: ", invoice)
         ctx.replyWithInvoice(invoice).then((invoice_result)=>{
             console.log("invoice result: ", invoice_result)                
@@ -154,7 +154,7 @@ buyStepHandler.action('no', (ctx) => {
 
 buyStepHandler.use(
   (ctx) => {
-    ctx.reply('хммм... не понял')
+    ctx.reply('простите, не понял. Давайте попробуем еще раз...', utils.main_menu_keyboard())
     return ctx.scene.leave()
   }
 )
@@ -234,7 +234,7 @@ exports.buy_crypto = new WizardScene("buy_crypto",
                 let sendUZS = Math.round(Number(ctx.wizard.state.amount))
                 let qty_usd = ctx.wizard.state.qty_usd = Math.round(sendUZS / sum_rate * 100) / 100
     
-                ctx.reply(` ${ sendUZS } SUM =  ${ utils.fullUSD(qty_usd) } по курсу ${utils.fullSUM(sum_rate)} сум за 1 доллар`)
+                // ctx.reply(` ${ sendUZS } SUM =  ${ utils.fullUSD(qty_usd) } по курсу ${utils.fullSUM(sum_rate)} сум за 1 доллар`)
                 console.log("Считаем в USD", qty_usd)
                 comm = ctx.wizard.state.comm = utils.getCommission(qty_usd, ctx.wizard.state.base==="UZCARD")
                 let profit_usd = ctx.wizard.state.profit_usd = Number((qty_usd - (qty_usd / comm )).toFixed(2))
@@ -264,16 +264,15 @@ exports.buy_crypto = new WizardScene("buy_crypto",
       if (valid) {
         ctx.wizard.state.address = ctx.message.text;
         ctx.replyWithMarkdown(
-            `📝 *ПОДТВЕРДИТЕ ЗАЯВКУ НА ПОКУПКУ BTC*:\n\n` +
-            `💵 К оплате: *${utils.fullSUM(ctx.wizard.state.qty_sum)}*\n` + 
-            ` ₿  Вы получите: *${utils.fullBTC(ctx.wizard.state.qty_btc)}* (${utils.shortSAT(ctx.wizard.state.qty_btc * 100000000)})\n` +
-            `🙏 Комиссия: ${utils.longUSD(ctx.wizard.state.profit_usd)} |${utils.shortSUM(ctx.wizard.state.profit_usd * sum_rate)} |${utils.shortSAT(ctx.wizard.state.profit_usd / ctx.wizard.state.real_rate)}\n` +
-            `👐 Комиссия за обмен: ${utils.convertCommision(ctx.wizard.state.comm)}%\n` +
-            `📈 Курс BTC: ${utils.shortUSD(ctx.wizard.state.real_rate)} (${utils.shortSUM(ctx.wizard.state.real_rate * sum_rate)})\n` +
-            `💱 Курс BTC с учетом комиссии: ${utils.shortUSD(ctx.wizard.state.rate_usd)} (${utils.shortSUM(ctx.wizard.state.rate_usd * sum_rate)})\n` +
+            `📝 *ПОДТВЕРДИТЕ ЗАЯВКУ НА ПОКУПКУ BTC*: 📝\n\n` +
+            `💵 К оплате: *${utils.fullSUM(ctx.wizard.state.qty_sum)}* | ${utils.shortUSD(ctx.wizard.state.qty_usd)}\n` + 
+            `  ₿   Вы получите: ${utils.shortSAT(ctx.wizard.state.qty_btc * 100000000)} (${utils.fullBTC(ctx.wizard.state.qty_btc)})\n` +
+            `\n🙏 Комиссия (${utils.convertCommision(ctx.wizard.state.comm)}%): ${utils.shortSAT(ctx.wizard.state.profit_usd / ctx.wizard.state.real_rate * 100000000)} | ${utils.shortSUM(ctx.wizard.state.profit_usd * sum_rate)} | ${utils.fullUSD(ctx.wizard.state.profit_usd)}\n` +
+            `\n📈 Курс BTC: ${utils.shortUSD(ctx.wizard.state.real_rate)} (~${utils.shortSUM(ctx.wizard.state.real_rate * sum_rate)})\n` +
+            `💱 Курс BTC с учетом комиссии: ${utils.shortUSD(ctx.wizard.state.rate_usd)} (~${utils.shortSUM(ctx.wizard.state.rate_usd * sum_rate)})\n` +
             `💲  Курс доллара: ${utils.fullSUM(sum_rate)}\n` +
-            `🏠 Адрес отправки BTC: ${ctx.wizard.state.address}\n` +
-            `🐎 Комиссия за перевод: ${Math.trunc(ctx.wizard.state.fee_sat)} sat (${utils.longUSD(ctx.wizard.state.fee_usd)})`,
+            `\n🏠 Адрес отправки BTC: ${ctx.wizard.state.address}\n` +
+            `🐎 Комиссия за перевод: ${Math.trunc(ctx.wizard.state.fee_sat)}sat | ${utils.fullSUM(ctx.wizard.state.fee_usd * sum_rate)} | ${utils.longUSD(ctx.wizard.state.fee_usd)}`,
           Markup.inlineKeyboard([
             Markup.callbackButton("✔ Да", "yes2"),
             Markup.callbackButton("❌ Нет", "no")
@@ -300,12 +299,12 @@ function approveDealMessage(ctx, qty_usd, qty_sum, profit_usd, rate_btc, rate_ef
       ctx.replyWithMarkdown("Минимальная сумма покупки 10000 сум. Пожалуйста попробуйте еще раз.")
       return ctx.scene.back()
     } else {
-      ctx.replyWithMarkdown(`📝 РАСЧЕТ ЗАЯВКИ НА ПОКУПКУ *${qty_btc}*btc (${utils.shortSAT(qty_btc * 100000000)})\n\n` +
-        `💵 К оплате: *${utils.shortUSD(qty_usd)}* | *${utils.fullSUM(qty_sum)}*\n` +
-        `🙏 Комиссия: ${utils.longUSD(profit_usd)} |${utils.shortSUM(profit_usd * rate_sum)} |${utils.fullBTC(profit_usd / rate_btc)}\n` +
-        `👐 Комиссия в %: ${utils.convertCommision(comm)}%\n` +
-        `📈 Курс BTC: ${utils.shortUSD(rate_btc)} (${utils.shortSUM(rate_btc * rate_sum)})\n` +
-        `💱 Курс BTC с учетом комиссии: ${utils.shortUSD(rate_effective_btc)} (${utils.shortSUM(rate_effective_btc * rate_sum)})\n` +
+      ctx.replyWithMarkdown(`📄 РАСЧЕТ ЗАЯВКИ НА ПОКУПКУ 📄\n\n` +
+        `💵 К оплате: *${utils.fullSUM(qty_sum)}* | ${utils.shortUSD(qty_usd)}\n` +
+        `  ₿   Вы получите: *${utils.shortSAT(qty_btc * 100000000)}* (${utils.fullBTC(qty_btc)})\n` +
+        `\n🙏 Комиссия (${utils.convertCommision(comm)}%): ${utils.shortSAT(profit_usd / rate_btc * 100000000)} | ${utils.shortSUM(profit_usd * rate_sum)} | ${utils.fullUSD(profit_usd)}\n` +
+        `\n📈 Курс BTC: ${utils.shortUSD(rate_btc)} (~${utils.shortSUM(rate_btc * rate_sum)})\n` +
+        `💱 Курс BTC с учетом комиссии: ${utils.shortUSD(rate_effective_btc)} (~${utils.shortSUM(rate_effective_btc * rate_sum)})\n` +
         `💲 Курс доллара: ${utils.fullSUM(rate_sum)}\n`,
           Markup.inlineKeyboard([
               Markup.callbackButton("👌 Устраивает", "yes1"),
