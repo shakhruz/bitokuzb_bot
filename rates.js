@@ -55,6 +55,10 @@ function sum() {
     return sum_usd_rate
 }
 
+function sum_cb_price() {
+    return sum_usd_rate.cb_price
+}
+
 function sum_buy_price() {
     return sum_usd_rate.nbu_cell_price
 }
@@ -65,5 +69,5 @@ function sum_buy_price() {
 // }, 60*24*1000)
 
 module.exports = {
-    sum, crypto, minter, updateRates, updateUZSRate, sum_buy_price
+    sum, crypto, minter, updateRates, updateUZSRate, sum_buy_price, sum_cb_price
 }

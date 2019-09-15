@@ -219,11 +219,15 @@ function getETHBalance(address, callback) {
 exports.showReserves = function(ctx, callback) {
     let balance_reply = `*🏦 В НАЛИЧИИ НА ПРОДАЖУ:*\n\n`
     bcoin.getBalance(data.BTCReserveAccountName, (balance)=> {
-        balance_reply += `${utils.shortSAT(balance * 100000000)} (${balance}*btc) | ${utils.shortUSD(balance*rates.crypto().BTC)}`
+        const balance_usd = balance * rates.crypto().BTC
+        const balance_sat = balance * 100000000
+        const balance_sum = balance_usd * rates.sum_cb_price()
+        balance_reply += `*${utils.shortSAT(balance_sat)}* (${balance}btc) | ${utils.shortSUM(balance_sum)} | ${utils.shortUSD(balance_usd)}`
         minter.getBIPBalance(data.BIPReserveAddress, (BIPBalance) => {
             // balance_reply += `\n*${BIPBalance}* BIP  | ${utils.shortUSD(BIPBalance*rates.minter().bipPriceUsd)}`
             eth.getBalance(data.ethAddress, (ETHBalance) => {
                 // balance_reply += `\n*${ETHBalance}* ETH | ${utils.shortUSD(ETHBalance*rates.crypto().ETH)}`
+                console.log("reserves balance: ", balance_reply)
                 ctx.replyWithMarkdown(balance_reply) 
                 callback()               
             })            
@@ -269,9 +273,6 @@ bot.hears("₿🚀👍🔥 Купить БИТКОИН",  enter("buy_crypto"))
 bot.hears("👛🏆🔒😎 ОТКРЫТЬ БИТКОИН КОШЕЛЕК",  (ctx)=> {
     console.log("Балансы счетов");
     showAllBalances(ctx,true)
-    // setTimeout(()=> {
-    //     showReserves(ctx)
-    // }, 1000)
 })
 
 bot.hears("💵🏎️✈️👨‍👧‍👧🌴 Продать БИТКОИН",  (ctx)=> {
@@ -358,7 +359,7 @@ function completeContract(ctx, contract) {
     bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee_sat, (result, arg)=>{
         console.log("bcoin sent: ", result, arg)
         if (result) {
-            ctx.replyWithMarkdown(`Транзакция отправлена, результат можно посмотреть здесь: https://www.blockchain.com/btc/tx/${arg}`)
+            ctx.replyWithMarkdown(`${utils.shortSAT(contract.buy_amount*100000000)} (${utils.fullBTC(contract.buy_amount)}) отправлены, результат можно посмотреть здесь: https://www.blockchain.com/btc/tx/${arg}`)
             ctx.replyWithSticker("CAADAgADBwEAAoRAEwAB-36a_n_Uk5QWBA")
             db.updateContract(contract.id, "completed")                
         } else {

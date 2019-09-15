@@ -148,7 +148,7 @@ buyStepHandler.action('yes2', (ctx) => {
 })
 
 buyStepHandler.action('no', (ctx) => {
-  ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
+  ctx.reply(`Спасибо за Покупку!`, utils.main_menu_keyboard())
   return ctx.scene.leave()
 })
 
