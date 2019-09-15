@@ -102,7 +102,7 @@ exports.createInvoice = function(qty_sum, qty_btc, contract_id) {
         provider_token: data.provider_token_live,
         start_parameter: contract_id,
         title: 'Биткоин (BTC)',
-        description: `${this.shortSAT(qty_btc * 100000000)}`,
+        description: `${this.shortSAT(qty_btc * 100000000)} (${this.fullBTC(qty_btc)}btc)`,
         currency: 'UZS',
         is_flexible: false,
         // need_shipping_address: false,
@@ -124,3 +124,10 @@ exports.createInvoice = function(qty_sum, qty_btc, contract_id) {
 exports.main_menu_keyboard = function () {
     return Markup.keyboard(["₿🚀👍🔥 Купить БИТКОИН", "💵🏎️✈️👨‍👧‍👧🌴 Продать БИТКОИН", "👛🏆🔒😎 ОТКРЫТЬ БИТКОИН КОШЕЛЕК", "🆘🤗🍵 Помощь"]).oneTime().resize().extra();
 }
+
+exports.qty_btc_min = 0.0001
+exports.qty_btc_max = 0.1
+exports.qty_sum_min = 10000
+exports.qty_sum_max = 10000000
+exports.qty_usd_min = 1
+exports.qty_usd_max = 1000

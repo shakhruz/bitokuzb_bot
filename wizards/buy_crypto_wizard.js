@@ -180,7 +180,7 @@ exports.buy_crypto = new WizardScene("buy_crypto",
   buyStepHandler,
   ctx => {
     if (!ctx.message) {
-      ctx.reply(`Начнем с начала...`)          
+      ctx.reply(`Ок...`, utils.main_menu_keyboard())          
       return ctx.scene.leave()
     } 
     ctx.wizard.state.amount = Number(ctx.message.text.replace(',', '.'));
@@ -193,7 +193,7 @@ exports.buy_crypto = new WizardScene("buy_crypto",
         let rate_usd = rates.crypto().BTC
         qty_btc = ctx.wizard.state.qty_btc = Number(Number(ctx.wizard.state.amount).toFixed(8))
         console.log("Считаем в BTC: ", qty_btc)
-
+        
         qty_usd = ctx.wizard.state.qty_usd = utils.convertUSD(qty_btc, rate_usd)
         comm = ctx.wizard.state.comm = utils.getCommission(qty_usd)
 
@@ -205,6 +205,15 @@ exports.buy_crypto = new WizardScene("buy_crypto",
         let sum_rate = ctx.wizard.state.USDrate = rates.sum_buy_price()
         qty_sum = ctx.wizard.state.qty_sum = Math.round(qty_usd * sum_rate)
         console.log('комиссия расчета ', comm)
+        
+        if (qty_btc < utils.qty_btc_min) {
+          ctx.reply(`Число должно быть больше ${utils.qty_btc_min}. Попробуйте пожалуйста еще раз.`)
+          return ctx.wizard.back()
+        } else if (qty_btc > utils.qty_btc_max) {
+          ctx.reply(`Число должно быть меньше ${utils.qty_btc_max}. Попробуйте пожалуйста еще раз.`)
+          return ctx.wizard.back()
+        }
+        
         approveDealMessage(ctx, qty_usd, qty_sum, profit_usd, real_rate, rate_usd, sum_rate)
         return ctx.wizard.next()
       } else {
@@ -221,6 +230,14 @@ exports.buy_crypto = new WizardScene("buy_crypto",
             let sum_rate = ctx.wizard.state.USDrate = rates.sum_buy_price()
             qty_sum = ctx.wizard.state.qty_sum = Math.round(qty_usd * sum_rate)
             console.log('комиссия расчета ', comm)
+
+            if (qty_usd < utils.qty_usd_min) {
+              ctx.reply(`Число должно быть больше ${utils.qty_usd_min}. Попробуйте пожалуйста еще раз.`)
+              return ctx.wizard.back()
+            } else if (qty_usd > utils.qty_usd_max) {
+              ctx.reply(`Число должно быть меньше ${utils.qty_usd_max}. Попробуйте пожалуйста еще раз.`)
+              return ctx.wizard.back()
+            }            
             
             approveDealMessage(ctx, qty_usd, qty_sum, profit_usd, real_rate, rate_usd, sum_rate)
             return ctx.wizard.next()
@@ -243,6 +260,15 @@ exports.buy_crypto = new WizardScene("buy_crypto",
                 rate_usd = ctx.wizard.state.rate_usd = Number((rate_usd * comm).toFixed(2))
                 qty_btc = ctx.wizard.state.qty_btc = utils.convert(qty_usd, rate_usd)
                 console.log('комиссия расчета ', comm)
+
+                if (qty_sum < utils.qty_sum_min) {
+                  ctx.reply(`Число должно быть больше ${utils.qty_sum_min}. Попробуйте пожалуйста еще раз.`)
+                  return ctx.wizard.back()
+                } else if (qty_sum > utils.qty_sum_max) {
+                  ctx.reply(`Число должно быть меньше ${utils.qty_sum_max}. Попробуйте пожалуйста еще раз.`)
+                  return ctx.wizard.back()
+                }            
+    
                 approveDealMessage(ctx, qty_usd, qty_sum, profit_usd, real_rate, rate_usd, sum_rate)
 
                 return ctx.wizard.next()
@@ -295,9 +321,12 @@ exports.buy_crypto = new WizardScene("buy_crypto",
 )
 
 function approveDealMessage(ctx, qty_usd, qty_sum, profit_usd, rate_btc, rate_effective_btc, rate_sum) {
-    if (qty_usd<1) {
-      ctx.replyWithMarkdown("Минимальная сумма покупки 10000 сум. Пожалуйста попробуйте еще раз.")
-      return ctx.scene.back()
+  bcoin.getBalance(data.BTCReserveAccountName, (balance)=> {
+    const balance_usd = balance * rates.crypto().BTC
+    const balance_sat = balance * 100000000
+    const balance_sum = balance_usd * rates.sum_cb_price()
+    if (qty_usd>balance_usd) {
+      ctx.replyWithMarkdown(`К сожалению столько нет в резерве обменника. \n\nПожалуйста попробуйте сумму менее ${utils.shortSAT(balance_sat)} (${utils.shortBTC(balance)}) | ${utils.shortSUM(balance_sum)} | ${utils.shortUSD(balance_usd)}`)
     } else {
       ctx.replyWithMarkdown(`📄 РАСЧЕТ ЗАЯВКИ НА ПОКУПКУ 📄\n\n` +
         `💵 К оплате: *${utils.fullSUM(qty_sum)}* | ${utils.shortUSD(qty_usd)}\n` +
@@ -312,4 +341,5 @@ function approveDealMessage(ctx, qty_usd, qty_sum, profit_usd, rate_btc, rate_ef
         ]).extra()
       )
     }
+  })
 }
