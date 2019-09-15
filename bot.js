@@ -283,8 +283,9 @@ function sell_crypto(ctx) {
     ctx.replyWithSticker("CAADAgADxQADhEATAAE_gjZb-SdSCxYE")
 
     setTimeout(()=> {
-        ctx.replyWithMarkdown(`☎️ Обращайтесь по вопросам продажи крипто активов к @BitcoinTAS.\n\n🏠 Адрес для отправки BTC: 🏠`)
-        ctx.replyWithMarkdown(`199FX9tQ JBbf7Nfsr3T6xx28cnrrwuzUZB`)
+        ctx.replyWithMarkdown(`☎️ Обращайтесь по вопросам продажи крипто активов к @BitcoinTAS.\n\n🏠 Адрес для отправки BTC: 🏠`).then(()=>{
+            ctx.replyWithMarkdown(`199FX9tQ JBbf7Nfsr3T6xx28cnrrwuzUZB`, utils.main_menu_keyboard())
+        })
     }, 1000)    
 }
 
@@ -293,8 +294,9 @@ bot.hears("🆘🤗🍵 Помощь",  (ctx)=> {
 })
 
 function help(ctx) {
-    ctx.replyWithMarkdown(`📟 По всем вопросам обращайтесь к @BitcoinTAS `)
-    ctx.replyWithSticker("CAADAgADwgADhEATAAHsXKC5jxDehhYE")
+    ctx.replyWithSticker("CAADAgADwgADhEATAAHsXKC5jxDehhYE").then(()=>{
+        ctx.replyWithMarkdown(`📟 По всем вопросам обращайтесь к @BitcoinTAS `, utils.main_menu_keyboard())
+    })
 }
 
 bot.on('sticker', (ctx) => {
