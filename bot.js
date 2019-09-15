@@ -226,9 +226,8 @@ exports.showReserves = function(ctx, callback) {
             // balance_reply += `\n*${BIPBalance}* BIP  | ${utils.shortUSD(BIPBalance*rates.minter().bipPriceUsd)}`
             eth.getBalance(data.ethAddress, (ETHBalance) => {
                 // balance_reply += `\n*${ETHBalance}* ETH | ${utils.shortUSD(ETHBalance*rates.crypto().ETH)}`
-                console.log("reserves balance: ", balance_reply)
+                // console.log("reserves balance: ", balance_reply)
                 ctx.replyWithMarkdown(balance_reply).then(()=>{callback()}) 
-                callback()               
             })            
         })        
     })
