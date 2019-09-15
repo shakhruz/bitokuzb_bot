@@ -102,7 +102,7 @@ exports.createInvoice = function(qty_sum, qty_btc, contract_id) {
         provider_token: data.provider_token_live,
         start_parameter: contract_id,
         title: 'Биткоин (BTC)',
-        description: `${this.shortSAT(qty_btc * 100000000)} (${this.fullBTC(qty_btc)}btc)`,
+        description: `${this.shortSAT(qty_btc * 100000000)} (${this.fullBTC(qty_btc)})`,
         currency: 'UZS',
         is_flexible: false,
         // need_shipping_address: false,
