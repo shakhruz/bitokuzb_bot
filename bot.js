@@ -356,7 +356,7 @@ bot.on('successful_payment', (ctx) => {
 // Исполнить контракт, отправить крипту
 function completeContract(ctx, contract) {
     // Исполняем контракт
-    bcoin.send(data.BTCReserveAccountName, contract.buy_amount, contract.to_address, contract.fee_sat, (result, arg)=>{
+    bcoin.send(data.BTCReserveAccountName, contract.buy_amount-contract.fee_sat/100000000, contract.to_address, contract.fee_sat, (result, arg)=>{
         console.log("bcoin sent: ", result, arg)
         if (result) {
             ctx.replyWithMarkdown(`${utils.shortSAT(contract.buy_amount*100000000)} (${utils.fullBTC(contract.buy_amount)}) отправлены, результат можно посмотреть здесь: https://www.blockchain.com/btc/tx/${arg}`)
