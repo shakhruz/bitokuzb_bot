@@ -368,7 +368,7 @@ function completeContract(ctx, contract) {
             db.updateContract(contract.id, "error")                
         }
         setTimeout(()=>{
-            ctx.reply(`Что делаем дальше?`, utils.main_menu_keyboard())
+            ctx.reply(`Спасибо за Покупку!`, utils.main_menu_keyboard())
         }, 3000)
     })
 }
