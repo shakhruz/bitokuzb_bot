@@ -24,7 +24,10 @@ function updateUZSRate() {
         console.log("курс сума продажа: ", sum_usd_rate.nbu_cell_price)
         console.log("курс сума покупка: ", sum_usd_rate.nbu_buy_price)
         console.log("курс цб: ", sum_usd_rate.cb_price)        
-    })
+    }).catch(function() {
+        console.log("error");
+        sum_usd_rate = {nbu_cell_price: 9450, nbu_buy_price: 9390, cb_price: 9350}
+    });
 }
 
 updateUZSRate()

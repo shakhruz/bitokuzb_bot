@@ -450,3 +450,10 @@ module.exports = {
     sendError,
     isAdmin
 }
+
+//
+//start - Главное МЕНЮ
+// buy - Купить БИТКОИН
+// sell - Продать БИТКОИН
+// balance - ОТКРЫТЬ БИТКОИН КОШЕЛЕК
+// help - Помощь
