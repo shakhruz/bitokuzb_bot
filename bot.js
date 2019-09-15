@@ -222,14 +222,15 @@ exports.showReserves = function(ctx, callback) {
         const balance_sat = balance * 100000000
         const balance_sum = balance_usd * rates.sum_cb_price()
         balance_reply += `*${utils.shortSAT(balance_sat)}* (${balance}btc) | ${utils.shortSUM(balance_sum)} | ${utils.shortUSD(balance_usd)}`
-        minter.getBIPBalance(data.BIPReserveAddress, (BIPBalance) => {
-            // balance_reply += `\n*${BIPBalance}* BIP  | ${utils.shortUSD(BIPBalance*rates.minter().bipPriceUsd)}`
-            eth.getBalance(data.ethAddress, (ETHBalance) => {
-                // balance_reply += `\n*${ETHBalance}* ETH | ${utils.shortUSD(ETHBalance*rates.crypto().ETH)}`
-                // console.log("reserves balance: ", balance_reply)
-                ctx.replyWithMarkdown(balance_reply).then(()=>{callback()}) 
-            })            
-        })        
+        ctx.replyWithMarkdown(balance_reply).then(()=>{callback()}) 
+        // minter.getBIPBalance(data.BIPReserveAddress, (BIPBalance) => {
+        //     // balance_reply += `\n*${BIPBalance}* BIP  | ${utils.shortUSD(BIPBalance*rates.minter().bipPriceUsd)}`
+        //     eth.getBalance(data.ethAddress, (ETHBalance) => {
+        //         // balance_reply += `\n*${ETHBalance}* ETH | ${utils.shortUSD(ETHBalance*rates.crypto().ETH)}`
+        //         // console.log("reserves balance: ", balance_reply)
+        //         ctx.replyWithMarkdown(balance_reply).then(()=>{callback()}) 
+        //     })            
+        // })        
     })
 }
 

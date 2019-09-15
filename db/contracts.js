@@ -2,7 +2,6 @@
 var sha256 = require('js-sha256');
 // status: new, completed, error
 
-
 class ContractsTable {
     constructor(dao) {
       this.dao = dao
