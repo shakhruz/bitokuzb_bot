@@ -193,7 +193,6 @@ function getBTCBalance(user_id, username, callback) {
             const balance_usd = balance*rates.crypto().BTC
             const balance_sum = balance*rates.crypto().BTC * rates.sum_buy_price();
             callback(`БИТКОИН 👛 КОШЕЛЕК 😎@${username}\n\n${utils.shortSAT(balance_sat)} (${balance}btc) | ${utils.shortSUM(balance_sum)} | ${utils.shortUSD(balance_usd)}\n🔒 ${account.receiveAddress}`,
-            // callback(`${username} \n\n${utils.shortSAT(balance_sat)} (${balance}btc) | ${utils.shortSUM(balance_sum)} | ${utils.shortUSD(balance_usd)}\n ${account.receiveAddress}`,
             balance*rates.crypto().BTC);
         })
     }) 
@@ -217,7 +216,7 @@ function getETHBalance(address, callback) {
 }
 
 exports.showReserves = function(ctx, callback) {
-    let balance_reply = `*🏦 В НАЛИЧИИ НА ПРОДАЖУ:*\n\n`
+    let balance_reply = `*🏦 В НАЛИЧИИ НА ПРОДАЖУ: 🏦*\n\n`
     bcoin.getBalance(data.BTCReserveAccountName, (balance)=> {
         const balance_usd = balance * rates.crypto().BTC
         const balance_sat = balance * 100000000
