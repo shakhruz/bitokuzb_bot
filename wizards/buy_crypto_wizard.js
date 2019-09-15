@@ -19,17 +19,17 @@ const bcoin = require('../bcoin.js')
 const buyStepHandler = new Composer()
 buyStepHandler.action('fromBTC', (ctx) => {
   ctx.wizard.state.base = "BTC"
-  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*Укажите сумму биткоинов (BTC) для покупки (0.001 - 1):*')
+  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*Укажите сумму биткоинов BTC для покупки:*\n0.001 - 1')
   return ctx.wizard.next()
 })  
 buyStepHandler.action('fromUSD', (ctx) => {
   ctx.wizard.state.base = "USD"
-  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*На какую сумму в Долларах хотите купить BTC ($1 до $1000) ?* ')
+  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*На какую сумму в Долларах хотите купить BTC?*\n\n1-1000')
   return ctx.wizard.next()
 })
 buyStepHandler.action('fromSUM', (ctx) => {
   ctx.wizard.state.base = "SUM"
-  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*На какую сумму в Cумах хотите купить BTC (10тыс сум до 10млн сум)?*')
+  ctx.replyWithMarkdown('₿🚀👍🔥 ПОКУПКА БИТКОИНА 2/4\n\n*На какую сумму в Cумах хотите купить BTC?*\n\n10000-10000000')
   return ctx.wizard.next()
 })
 
