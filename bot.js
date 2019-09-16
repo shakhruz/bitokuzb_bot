@@ -125,9 +125,9 @@ function welcomeUser(ctx) {
                     bcoin.addBTCWallet(ctx.from.id, (message)=> {
                         ctx.replyWithMarkdown(message)
                         eth.addETHWallet(ctx.from.id, (message)=> {
-                            ctx.replyWithMarkdown(message)
+                            // ctx.replyWithMarkdown(message)
                             minter.addBIPWallet(ctx.from.id, (message)=> {
-                                ctx.replyWithMarkdown(message)
+                                // ctx.replyWithMarkdown(message)
                                 ctx.replyWithSticker("CAADAgAD-QADhEATAAHVoDcGEm_E2RYE") // party time
                             })
                         })
@@ -284,7 +284,7 @@ function sell_crypto(ctx) {
 
     setTimeout(()=> {
         ctx.replyWithMarkdown(`☎️ Обращайтесь по вопросам продажи крипто активов к @BitcoinTAS.\n\n🏠 Адрес для отправки BTC: 🏠`).then(()=>{
-            ctx.replyWithMarkdown(`199FX9tQ JBbf7Nfsr3T6xx28cnrrwuzUZB`, utils.main_menu_keyboard())
+            ctx.replyWithMarkdown(`199FX9tQJBbf7Nfsr3T6xx28cnrrwuzUZB`, utils.main_menu_keyboard())
         })
     }, 1000)    
 }
