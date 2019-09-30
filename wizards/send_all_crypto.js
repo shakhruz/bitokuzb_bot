@@ -144,7 +144,7 @@ exports.send_all_crypto = new WizardScene(
 
         // Выводим из кошелька
         bcoin.send(
-          ctx.from.id,
+          ctx.from.id.toString(),
           ctx.wizard.state.qty_btc,
           ctx.wizard.state.address,
           ctx.wizard.state.fee_sat,
