@@ -120,6 +120,7 @@ exports.send_all_crypto = new WizardScene(
               Markup.callbackButton("👎 Нет", "no")
             ]).extra()
           );
+          return ctx.wizard.next();
         }
       });
     });
