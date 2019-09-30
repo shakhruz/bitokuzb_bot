@@ -162,7 +162,9 @@ exports.main_menu_keyboard = function() {
 };
 
 exports.toNumber = function(num_string) {
-  return Number(num_string.toString().replace(" ", ""));
+  const num = Number(num_string.toString().replace(/ /g, ""));
+  console.log("string: " + num_string + "number: " + num);
+  return num;
 };
 
 exports.qty_btc_min = 0.0001;
