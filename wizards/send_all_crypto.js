@@ -55,8 +55,13 @@ buyStepHandler.action("regular", ctx => {
 
   // вычитаем комиссию за перевод из общей суммы
   ctx.wizard.state.qty_btc -= ctx.wizard.state.fee_sat / 100000000;
-  ctx.replyWithMarkdown(`На какой адрес отправить BTC?`);
-  return ctx.wizard.next();
+  if (ctx.wizard.state.qty_btc > 0) {
+    ctx.replyWithMarkdown(`На какой адрес отправить BTC?`);
+    return ctx.wizard.next();
+  } else {
+    ctx.replyWithMarkdown(`Недостаточно средств на кошельке для вывода...`);
+    return ctx.wizard.next();
+  }
 });
 
 buyStepHandler.action("fast", ctx => {
@@ -66,8 +71,13 @@ buyStepHandler.action("fast", ctx => {
 
   // вычитаем комиссию за перевод из общей суммы
   ctx.wizard.state.qty_btc -= ctx.wizard.state.fee_sat / 100000000;
-  ctx.replyWithMarkdown(`На какой адрес отправить BTC?`);
-  return ctx.wizard.next();
+  if (ctx.wizard.state.qty_btc > 0) {
+    ctx.replyWithMarkdown(`На какой адрес отправить BTC?`);
+    return ctx.wizard.next();
+  } else {
+    ctx.replyWithMarkdown(`Недостаточно средств на кошельке для вывода...`);
+    return ctx.wizard.next();
+  }
 });
 
 buyStepHandler.action("no", ctx => {
