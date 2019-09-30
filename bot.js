@@ -112,6 +112,7 @@ bot.start(ctx => {
       "₿🚀👍🔥 Купить БИТКОИН",
       "💵🏎️✈️👨‍👧‍👧🌴 Продать БИТКОИН",
       "👛🏆🔒😎 ОТКРЫТЬ БИТКОИН КОШЕЛЕК",
+      "₿🏧➡🚪  Снять БИТКОИН",
       "🆘🤗🍵 Помощь"
     ])
       .oneTime()
@@ -304,7 +305,12 @@ function showRates(ctx) {
 
 // Визарды
 const buy_crypto_wizard = require("./wizards/buy_crypto_wizard.js");
-const stage = new Stage([buy_crypto_wizard.buy_crypto], { ttl: 300 });
+const send_all_crypto = require("./wizards/send_all_crypto.js");
+
+const stage = new Stage(
+  [buy_crypto_wizard.buy_crypto, send_all_crypto.send_all_crypto],
+  { ttl: 300 }
+);
 bot.use(session());
 bot.use(stage.middleware());
 
@@ -324,6 +330,8 @@ bot.hears("👛🏆🔒😎 ОТКРЫТЬ БИТКОИН КОШЕЛЕК", ctx =
   console.log("Балансы счетов");
   showAllBalances(ctx, true);
 });
+
+bot.hears("₿🏧➡🚪  Снять БИТКОИН", enter("send_all_crypto"));
 
 bot.hears("💵🏎️✈️👨‍👧‍👧🌴 Продать БИТКОИН", ctx => {
   sell_crypto(ctx);
