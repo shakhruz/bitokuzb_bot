@@ -153,9 +153,9 @@ exports.send_all_crypto = new WizardScene(
             if (result) {
               ctx.replyWithMarkdown(
                 `${utils.shortSAT(
-                  contract.buy_amount * 100000000
+                  ctx.wizard.state.qty_btc * 100000000
                 )} (${utils.fullBTC(
-                  contract.buy_amount
+                  ctx.wizard.state.qty_btc
                 )}) отправлены, результат можно посмотреть здесь: https://www.blockchain.com/btc/tx/${arg}`
               );
             } else {
