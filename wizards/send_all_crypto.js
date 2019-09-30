@@ -108,7 +108,7 @@ exports.send_all_crypto = new WizardScene(
           return ctx.scene.leave();
         } else {
           ctx.reply(
-            `БИТКОИН 👛 КОШЕЛЕК 😎@${username}\n\n${utils.shortSAT(
+            `БИТКОИН 👛 КОШЕЛЕК 😎@${ctx.from.username}\n\n${utils.shortSAT(
               balance_sat
             )} (${balance}btc) | ${utils.shortSUM(
               balance_sum
